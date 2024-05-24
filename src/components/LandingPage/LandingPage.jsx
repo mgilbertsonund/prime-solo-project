@@ -6,6 +6,7 @@ import data from './test'; // Adjust the path if necessary
 
 // CUSTOM COMPONENTS
 import RegisterForm from '../RegisterForm/RegisterForm';
+import SideNav from '../SideNav/SideNav';
 
 function LandingPage() {
   const [heading, setHeading] = useState('Welcome');
@@ -46,13 +47,10 @@ function LandingPage() {
   return (
     <div className="container">
       <div className="grid">
-        <div className="grid-col grid-col_8">
-          <h1>{heading}</h1>
-          <button onClick={onLogin}>Login</button>
-          <RegisterForm />
+        <div className="grid-col grid-col_1">
         </div>
-        <div className="grid-col grid-col_4">
-          <h2>Games</h2>
+        <div className="grid-col grid-col_11">
+          <h2>Upcoming Games</h2>
           <ul>
             {data.map((game) => (
               <li key={game.id}>
