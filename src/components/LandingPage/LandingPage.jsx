@@ -1,6 +1,8 @@
+// src/components/LandingPage/LandingPage.js
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './LandingPage.css';
+import data from './test'; // Adjust the path if necessary
 
 // CUSTOM COMPONENTS
 import RegisterForm from '../RegisterForm/RegisterForm';
@@ -13,53 +15,54 @@ function LandingPage() {
     history.push('/login');
   };
 
+  // Function to convert American odds to implied probability
+  const americanToProbability = (odds) => {
+    return odds > 0 ? 100 / (odds + 100) : -odds / (-odds + 100);
+  };
+
+  // Function to convert implied probability to American odds
+  const probabilityToAmerican = (prob) => {
+    return prob >= 0.5 ? -100 * (prob / (1 - prob)) : 100 * ((1 - prob) / prob);
+  };
+
+  // Function to calculate average American odds
+  const calculateAverageAmericanOdds = (bookmakers, teamName) => {
+    const probabilities = [];
+    bookmakers.forEach((bookmaker) => {
+      const market = bookmaker.markets.find(m => m.key === 'h2h');
+      if (market) {
+        const outcome = market.outcomes.find(o => o.name === teamName);
+        if (outcome) {
+          probabilities.push(americanToProbability(outcome.price));
+        }
+      }
+    });
+    if (probabilities.length === 0) return null;
+    const averageProbability = probabilities.reduce((acc, prob) => acc + prob, 0) / probabilities.length;
+    const averageOdds = probabilityToAmerican(averageProbability);
+    return averageOdds.toFixed(0);
+  };
+
   return (
     <div className="container">
-      <h2>{heading}</h2>
-
       <div className="grid">
         <div className="grid-col grid-col_8">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-            id felis metus. Vestibulum et pulvinar tortor. Morbi pharetra lacus
-            ut ex molestie blandit. Etiam et turpis sit amet risus mollis
-            interdum. Suspendisse et justo vitae metus bibendum fringilla sed
-            sed justo. Aliquam sollicitudin dapibus lectus, vitae consequat odio
-            elementum eget. Praesent efficitur eros vitae nunc interdum, eu
-            interdum justo facilisis. Sed pulvinar nulla ac dignissim efficitur.
-            Quisque eget eros metus. Vestibulum bibendum fringilla nibh a
-            luctus. Duis a sapien metus.
-          </p>
-
-          <p>
-            Praesent consectetur orci dui, id elementum eros facilisis id. Sed
-            id dolor in augue porttitor faucibus eget sit amet ante. Nunc
-            consectetur placerat pharetra. Aenean gravida ex ut erat commodo, ut
-            finibus metus facilisis. Nullam eget lectus non urna rhoncus
-            accumsan quis id massa. Curabitur sit amet dolor nisl. Proin
-            euismod, augue at condimentum rhoncus, massa lorem semper lacus, sed
-            lobortis augue mi vel felis. Duis ultrices sapien at est convallis
-            congue.
-          </p>
-
-          <p>
-            Fusce porta diam ac tortor elementum, ut imperdiet metus volutpat.
-            Suspendisse posuere dapibus maximus. Aliquam vitae felis libero. In
-            vehicula sapien at semper ultrices. Vivamus sed feugiat libero. Sed
-            sagittis neque id diam euismod, ut egestas felis ultricies. Nullam
-            non fermentum mauris. Sed in enim ac turpis faucibus pretium in sit
-            amet nisi.
-          </p>
+          <h1>{heading}</h1>
+          <button onClick={onLogin}>Login</button>
+          <RegisterForm />
         </div>
         <div className="grid-col grid-col_4">
-          <RegisterForm />
-
-          <center>
-            <h4>Already a Member?</h4>
-            <button className="btn btn_sizeSm" onClick={onLogin}>
-              Login
-            </button>
-          </center>
+          <h2>Games</h2>
+          <ul>
+            {data.map((game) => (
+              <li key={game.id}>
+                <h3>{game.away_team} vs. {game.home_team}</h3>
+                <p>Market: Moneyline</p>
+                <p>Average Away Odds: {calculateAverageAmericanOdds(game.bookmakers, game.away_team)}</p>
+                <p>Average Home Odds: {calculateAverageAmericanOdds(game.bookmakers, game.home_team)}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
@@ -67,3 +70,4 @@ function LandingPage() {
 }
 
 export default LandingPage;
+
