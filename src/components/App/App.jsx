@@ -13,16 +13,21 @@ import Footer from '../Footer/Footer';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
-import AboutPage from '../AboutPage/AboutPage';
+import AboutPage from '../Schedule/Schedule';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import Standings from '../Standings/Standings';
+import Players from '../Players/Players';
+import BetTracker from '../BetTracker/BetTracker';
+import HelpAndResources from '../HelpAndResources/HelpAndResources';
 
 import SideNav from '../SideNav/SideNav'; // Import the SideNav component
 
 import './App.css';
+import Schedule from '../Schedule/Schedule';
 
 function App() {
   const dispatch = useDispatch();
@@ -45,9 +50,37 @@ function App() {
 
               <Route
                 exact
-                path="/about"
+                path="/schedule"
               >
-                <AboutPage />
+                <Schedule />
+              </Route>
+
+              <Route
+                exact
+                path="/standings"
+              >
+                <Standings />
+              </Route>
+
+              <Route
+                exact
+                path="/players"
+              >
+                <Players />
+              </Route>
+
+              <Route
+                exact
+                path="/bet-tracker"
+              >
+                <BetTracker />
+              </Route>
+
+              <Route
+                exact
+                path="/help-&-resources"
+              >
+                <HelpAndResources />
               </Route>
 
               <ProtectedRoute
