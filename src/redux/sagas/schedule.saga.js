@@ -29,6 +29,7 @@ const fetchScheduleData = async () => {
         endDate: '2024-09-29'
       }
     });
+    //  applies a mapping function to each date object in the dates array and then flattens the result into a single array of games.
     return response.data.dates.flatMap(date => date.games);
   } catch (error) {
     console.error('Error fetching schedule:', error);

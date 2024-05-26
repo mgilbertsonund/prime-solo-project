@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import moment from 'moment-timezone';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchScheduleRequest } from '../../redux/actions/schedule.actions';
