@@ -1,64 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-// import './Standings.css'; // Ensure you have a CSS file for styling the table
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchStandingsRequest } from '../../redux/actions/standings.actions';
+
+const divisionNames = {
+  201: 'AL East',
+  202: 'AL Central',
+  203: 'AL West',
+  204: 'NL East',
+  205: 'NL Central',
+  206: 'NL West',
+};
 
 const Standings = () => {
-  const [alStandings, setAlStandings] = useState([]);
-  const [nlStandings, setNlStandings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { alStandings, nlStandings, loading, error } = useSelector(state => state.standings);
 
-  // An object that maps division IDs to their respective division names.
-  const divisionNames = {
-    201: 'AL East',
-    202: 'AL Central',
-    203: 'AL West',
-    204: 'NL East',
-    205: 'NL Central',
-    206: 'NL West'
-  };
 
-  // Fetches the data from the MLB api endpoint
-  // leagueId represents the params for the AL and NL standings endpoints, (i.e., 103 and 104)
-  const fetchStandings = async (leagueId) => {
-    try {
-      const response = await axios.get('https://statsapi.mlb.com/api/v1/standings', {
-        params: { leagueId }
-      });
-      return response.data.records;
-    } catch (err) {
-      throw err;
-    }
-  };
-
-  // on mount, call fetchStandings to fetch all the data from each league endpoint and set the data into each array
   useEffect(() => {
-    const fetchAllStandings = async () => {
-      try {
-        const [alData, nlData] = await Promise.all([
-          fetchStandings(103), // American League
-          fetchStandings(104)  // National League
-        ]);
-        setAlStandings(alData);
-        setNlStandings(nlData);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    dispatch(fetchStandingsRequest());
+  }, [dispatch]);
 
-    fetchAllStandings();
-  }, []);
-
-  // If loading is true, a loading message is displayed.
-  // If there's an error, an error message is displayed.
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  // A helper function that generates the standings table for each league.
-  const renderStandings = (standings) => (
+  const renderStandings = (standings, leagueName) => (
     <div>
+      <h2>{leagueName} Standings</h2>
       {standings.map(record => (
         <div key={record.division.id}>
           <h3>{divisionNames[record.division.id]}</h3>
@@ -90,14 +57,14 @@ const Standings = () => {
                   <td>{(teamRecord.winningPercentage * 100).toFixed(1)}%</td>
                   <td>{teamRecord.gamesBack}</td>
                   <td>{teamRecord.wildCardGamesBack}</td>
-                  <td>{teamRecord.records.splitRecords.find(record => record.type === 'lastTen').wins}-{teamRecord.records.splitRecords.find(record => record.type === 'lastTen').losses}</td>
-                  <td>{teamRecord.streak.streakCode}</td>
+                  <td>{teamRecord.records?.splitRecords?.find(record => record.type === 'lastTen')?.wins || 0}-{teamRecord.records?.splitRecords?.find(record => record.type === 'lastTen')?.losses || 0}</td>
+                  <td>{teamRecord.streak?.streakCode || ''}</td>
                   <td>{teamRecord.runsScored}</td>
                   <td>{teamRecord.runsAllowed}</td>
                   <td>{teamRecord.runDifferential}</td>
-                  <td>{teamRecord.records.expectedRecords[0].wins}-{teamRecord.records.expectedRecords[0].losses}</td>
-                  <td>{teamRecord.records.splitRecords.find(record => record.type === 'home').wins}-{teamRecord.records.splitRecords.find(record => record.type === 'home').losses}</td>
-                  <td>{teamRecord.records.splitRecords.find(record => record.type === 'away').wins}-{teamRecord.records.splitRecords.find(record => record.type === 'away').losses}</td>
+                  <td>{teamRecord.records?.expectedRecords?.[0]?.wins || 0}-{teamRecord.records?.expectedRecords?.[0]?.losses || 0}</td>
+                  <td>{teamRecord.records?.splitRecords?.find(record => record.type === 'home')?.wins || 0}-{teamRecord.records?.splitRecords?.find(record => record.type === 'home')?.losses || 0}</td>
+                  <td>{teamRecord.records?.splitRecords?.find(record => record.type === 'away')?.wins || 0}-{teamRecord.records?.splitRecords?.find(record => record.type === 'away')?.losses || 0}</td>
                 </tr>
               ))}
             </tbody>
