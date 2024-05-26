@@ -3,12 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchStandingsRequest } from '../../redux/actions/standings.actions';
 
 const divisionNames = {
-  201: 'AL East',
-  202: 'AL Central',
-  203: 'AL West',
-  204: 'NL East',
-  205: 'NL Central',
-  206: 'NL West',
+    200: 'AL West',
+    201: 'AL East',
+    202: 'AL Central',
+    203: 'NL West',
+    204: 'NL East',
+    205: 'NL Central',
 };
 
 const Standings = () => {
