@@ -12,7 +12,7 @@ export const fetchOddsSuccess = (odds) => ({
     payload: odds
 });
 
-export const fetchOddsFailure = () => ({
+export const fetchOddsFailure = (error) => ({
     type: FETCH_ODDS_FAILURE,
     payload: error,
 });
@@ -20,4 +20,4 @@ export const fetchOddsFailure = () => ({
 export const setLastFetchTime = (time) => ({
     type: SET_LAST_FETCH_TIME,
     payload: time,
-  });
+});
