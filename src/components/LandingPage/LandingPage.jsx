@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './LandingPage.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
@@ -68,6 +68,7 @@ function LandingPage() {
                 <p>Market: Moneyline</p>
                 <p>Average Away Odds: {calculateAverageAmericanOdds(game.bookmakers, game.away_team)}</p>
                 <p>Average Home Odds: {calculateAverageAmericanOdds(game.bookmakers, game.home_team)}</p>
+                <Link to={`/matches/${game.id}`}>View All Odds</Link>
               </li>
             ))}
           </ul>

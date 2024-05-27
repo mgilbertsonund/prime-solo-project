@@ -23,6 +23,7 @@ import Standings from '../Standings/Standings';
 import Players from '../Players/Players';
 import BetTracker from '../BetTracker/BetTracker';
 import HelpAndResources from '../HelpAndResources/HelpAndResources';
+import MatchPage from '../MatchPage/MatchPage';
 
 import SideNav from '../SideNav/SideNav'; // Import the SideNav component
 
@@ -128,6 +129,13 @@ function App() {
                   :
                   <LandingPage />
                 }
+              </Route>
+
+              <Route
+                exact
+                path="/matches/:matchId" 
+              >
+                <MatchPage />
               </Route>
 
               <Route>
