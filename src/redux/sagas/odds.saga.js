@@ -28,17 +28,15 @@ function* fetchOdds() {
       },
     });
 
-    if (response.status !== 200 || response.data.error) {
-      throw new Error('Failed to fetch odds data'); // Customize the error message as needed
-    }
+    console.log('API Response:', response.data);
 
     yield put(fetchOddsSuccess(response.data));
     yield put(setLastFetchTime(currentTime));
   } catch (error) {
+    console.error('API Error:', error.message);
     yield put(fetchOddsFailure(error.message));
   }
 }
-
 
 function* oddsSaga() {
   yield takeLatest(FETCH_ODDS_REQUEST, fetchOdds);

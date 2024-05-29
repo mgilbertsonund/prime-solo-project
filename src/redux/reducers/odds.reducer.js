@@ -21,6 +21,7 @@ const oddsReducer = (state = initialState, action) => {
         error: null,
       };
     case FETCH_ODDS_SUCCESS:
+      console.log('Reducer Success:', action.payload);
       return {
         ...state,
         loading: false,
