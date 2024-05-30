@@ -2,14 +2,14 @@ import {
   FETCH_ODDS_REQUEST,
   FETCH_ODDS_SUCCESS,
   FETCH_ODDS_FAILURE,
-  SET_LAST_FETCH_TIME
+  // SET_LAST_FETCH_TIME
 } from '../actions/odds.actions';
 
 const initialState = {
   odds: [],
   loading: false,
   error: null,
-  lastFetchTime: null,
+  // lastFetchTime: null,
 };
 
 const oddsReducer = (state = initialState, action) => {
@@ -33,11 +33,11 @@ const oddsReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
-    case SET_LAST_FETCH_TIME:
-      return {
-        ...state,
-        lastFetchTime: action.payload,
-      };
+    // case SET_LAST_FETCH_TIME:
+    //   return {
+    //     ...state,
+    //     lastFetchTime: action.payload,
+    //   };
     default:
       return state;
   }

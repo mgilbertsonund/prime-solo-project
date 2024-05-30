@@ -4,20 +4,20 @@ import {
   FETCH_ODDS_REQUEST,
   fetchOddsSuccess,
   fetchOddsFailure,
-  setLastFetchTime,
+  // setLastFetchTime,
 } from '../actions/odds.actions';
 
 const getLastFetchTime = (state) => state.odds.lastFetchTime;
 
 function* fetchOdds() {
   try {
-    const lastFetchTime = yield select(getLastFetchTime);
-    const currentTime = new Date().getTime();
-    const oneHour = 60 * 60 * 1000;
+    // const lastFetchTime = yield select(getLastFetchTime);
+    // const currentTime = new Date().getTime();
+    // const oneHour = 60 * 60 * 1000;
 
-    if (lastFetchTime && (currentTime - lastFetchTime < oneHour)) {
-      return;
-    }
+    // if (lastFetchTime && (currentTime - lastFetchTime < oneHour)) {
+    //   return;
+    // }
 
     const response = yield call(axios.get, 'https://api.the-odds-api.com/v4/sports/baseball_mlb/odds/', {
       params: {
@@ -31,7 +31,7 @@ function* fetchOdds() {
     console.log('API Response:', response.data);
 
     yield put(fetchOddsSuccess(response.data));
-    yield put(setLastFetchTime(currentTime));
+    // yield put(setLastFetchTime(currentTime));
   } catch (error) {
     console.error('API Error:', error.message);
     yield put(fetchOddsFailure(error.message));

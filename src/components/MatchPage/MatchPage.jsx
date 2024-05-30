@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+// src/components/MatchPage/MatchPage.js
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchOddsRequest } from '../../redux/actions/odds.actions'; 
-import './MatchPage.css'; 
+import { fetchOddsRequest } from '../../redux/actions/odds.actions';
+import { processOddsData } from '../../utils/matchPageCalculations';
+import './MatchPage.css';
 
 const MatchPage = () => {
   const { matchId } = useParams();
@@ -10,31 +12,25 @@ const MatchPage = () => {
   const { odds, loading, error } = useSelector(state => state.odds);
 
   useEffect(() => {
-    // Fetch odds data if it's not already loaded
     if (!odds || odds.length === 0) {
       dispatch(fetchOddsRequest());
     }
   }, [dispatch, odds]);
 
-  // Find the selected game based on the matchId
-  const selectedGame = odds.find(game => game.id === matchId);
+  // useMemo used so only recomputed when one of the dependencies changes
+  const selectedGame = useMemo(() => odds.find(game => game.id === matchId), [odds, matchId]);
+  
+  const processedOdds = useMemo(() => {
+    if (!selectedGame) return {};
+
+    return processOddsData(selectedGame);
+  }, [selectedGame]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
   if (!selectedGame) return <p>No game found.</p>;
 
-  // Find Pinnacle's odds
-  const pinnacle = selectedGame.bookmakers.find(bookmaker => bookmaker.key === 'pinnacle');
-  const pinnacleAwayOdds = pinnacle?.markets[0]?.outcomes.find(outcome => outcome.name === selectedGame.away_team)?.price;
-  const pinnacleHomeOdds = pinnacle?.markets[0]?.outcomes.find(outcome => outcome.name === selectedGame.home_team)?.price;
-
-  const isBetterOdds = (price, pinnaclePrice, isPositive) => {
-    if (isPositive) {
-      return price > pinnaclePrice;
-    }
-    return price > pinnaclePrice;
-  };
+  const { bookmakersData, bestAwayOdds, bestHomeOdds, bestAwayBookmaker, bestHomeBookmaker, averageAwayOdds, averageHomeOdds } = processedOdds;
 
   return (
     <div>
@@ -45,41 +41,33 @@ const MatchPage = () => {
           <thead>
             <tr>
               <th></th>
-              {selectedGame.bookmakers.map(bookmaker => (
+              <th>Best Odds</th>
+              <th>Average Odds</th>
+              {bookmakersData.map(bookmaker => (
                 <th key={bookmaker.key}>{bookmaker.title}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{selectedGame.away_team}</td>
-              {selectedGame.bookmakers.map(bookmaker => {
-                const awayPrice = bookmaker.markets[0]?.outcomes.find(outcome => outcome.name === selectedGame.away_team)?.price;
-                return (
-                  <td key={`${bookmaker.key}-away`} className={
-                    bookmaker.key !== 'pinnacle' && 
-                    isBetterOdds(awayPrice, pinnacleAwayOdds, pinnacleAwayOdds > 0) ? 
-                    'better-odds' : ''
-                  }>
-                    {awayPrice || 'N/A'}
-                  </td>
-                );
-              })}
+              <th>{selectedGame.away_team}</th>
+              <td>{bestAwayOdds} ({bestAwayBookmaker})</td>
+              <td>{averageAwayOdds}</td>
+              {bookmakersData.map(bookmaker => (
+                <td key={`${bookmaker.key}-away`} className={bookmaker.isBetterAway ? 'better-odds' : ''}>
+                  {bookmaker.awayPrice || 'N/A'}
+                </td>
+              ))}
             </tr>
             <tr>
-              <td>{selectedGame.home_team}</td>
-              {selectedGame.bookmakers.map(bookmaker => {
-                const homePrice = bookmaker.markets[0]?.outcomes.find(outcome => outcome.name === selectedGame.home_team)?.price;
-                return (
-                  <td key={`${bookmaker.key}-home`} className={
-                    bookmaker.key !== 'pinnacle' && 
-                    isBetterOdds(homePrice, pinnacleHomeOdds, pinnacleHomeOdds > 0) ? 
-                    'better-odds' : ''
-                  }>
-                    {homePrice || 'N/A'}
-                  </td>
-                );
-              })}
+              <th>{selectedGame.home_team}</th>
+              <td>{bestHomeOdds} ({bestHomeBookmaker})</td>
+              <td>{averageHomeOdds}</td>
+              {bookmakersData.map(bookmaker => (
+                <td key={`${bookmaker.key}-home`} className={bookmaker.isBetterHome ? 'better-odds' : ''}>
+                  {bookmaker.homePrice || 'N/A'}
+                </td>
+              ))}
             </tr>
           </tbody>
         </table>
