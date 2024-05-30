@@ -23,22 +23,13 @@ const MatchPage = () => {
     return processOddsData(selectedGame);
   }, [selectedGame]);
 
-  console.log('Processed Odds:', processedOdds);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!selectedGame) return <p>No game found.</p>;
 
   const { bookmakersData, bestAwayOdds, bestHomeOdds, bestAwayBookmaker, bestHomeBookmaker } = processedOdds;
-
   const arbitrageCalculatorVariables = processedOdds ? arbitrageCalculator({ bestAwayOdds, bestHomeOdds }) : null;
-
-  if (arbitrageCalculatorVariables) {
-    console.log('arbitrageCalculatorVariables:', arbitrageCalculatorVariables);
-  }
-
   const { stakeAway, stakeHome, payoutAway, payoutHome, totalStake, totalPayout, profitPercentage, hasArbitrageOpportunity } = arbitrageCalculatorVariables || {};
-
   const arbitrageStyle = hasArbitrageOpportunity ? 'arbitrage-opportunity' : 'no-arbitrage';
 
   return (
@@ -81,11 +72,11 @@ const MatchPage = () => {
       {arbitrageCalculatorVariables && (
         <div className={`arbitrage-calculator ${arbitrageStyle}`}>
           <div className="card">
-            <h2>Arbitrage Calculator</h2>
+            <h2>Suggested Bets</h2>
             <div className="card-content">
               <div className="card-section">
-                <span>Stake for Away Team: ${stakeAway}</span>
-                <span>Stake for Home Team: ${stakeHome}</span>
+                <span>Stake for Away Team: ${stakeAway} - {bestAwayBookmaker}</span>
+                <span>Stake for Home Team: ${stakeHome} - {bestHomeBookmaker}</span>
               </div>
               <div className="card-section">
                 <span>Payout for Away Team: ${payoutAway}</span>
@@ -98,9 +89,8 @@ const MatchPage = () => {
               </div>
             </div>
           </div>
-  </div>
-)}
-
+        </div>
+      )}
     </div>
   );
 };

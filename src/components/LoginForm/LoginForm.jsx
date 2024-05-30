@@ -26,7 +26,7 @@ function LoginForm() {
 
   return (
     <form className="formPanel" onSubmit={login}>
-      <h2>Login</h2>
+      <h2>Log in to XXX</h2>
       {errors.loginMessage && (
         <h3 className="alert" role="alert">
           {errors.loginMessage}
@@ -34,11 +34,11 @@ function LoginForm() {
       )}
       <div>
         <label htmlFor="username">
-          Username:
           <input
             type="text"
             name="username"
             required
+            placeholder='A Username Is Required'
             value={username}
             onChange={(event) => setUsername(event.target.value)}
           />
@@ -46,11 +46,11 @@ function LoginForm() {
       </div>
       <div>
         <label htmlFor="password">
-          Password:
           <input
             type="password"
             name="password"
             required
+            placeholder='A Password Is Required'
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />

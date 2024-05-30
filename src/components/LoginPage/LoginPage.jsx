@@ -7,9 +7,11 @@ function LoginPage() {
 
   return (
     <div>
+      
       <LoginForm />
 
       <center>
+      Don't have a account?
         <button
           type="button"
           className="btn btn_asLink"
@@ -17,7 +19,7 @@ function LoginPage() {
             history.push('/registration');
           }}
         >
-          Register
+          Sign up now
         </button>
       </center>
     </div>
