@@ -1,3 +1,5 @@
+import { americanToProbability, probabilityToAmerican } from './oddsCalculations';
+
 // Function to determine if the odds are better than Pinnacle's odds
 export const isBetterOdds = (price, pinnaclePrice) => {
   if (pinnaclePrice >= 0) {
@@ -46,55 +48,77 @@ export const processOddsData = (selectedGame) => {
     };
   });
 
-  const awayPrices = bookmakersData.map(b => b.awayPrice).filter(price => price !== undefined);
-  const homePrices = bookmakersData.map(b => b.homePrice).filter(price => price !== undefined);
-
-  const averageAwayOdds = (awayPrices.reduce((acc, price) => acc + price, 0) / awayPrices.length).toFixed(0);
-  const averageHomeOdds = (homePrices.reduce((acc, price) => acc + price, 0) / homePrices.length).toFixed(0);
-
   return {
     bookmakersData,
     bestAwayOdds,
     bestHomeOdds,
     bestAwayBookmaker,
     bestHomeBookmaker,
-    averageAwayOdds,
-    averageHomeOdds
   };
 };
 
 // Function to help calculate variables in arbitrage calculator
 export const arbitrageCalculator = ({ bestAwayOdds, bestHomeOdds }) => {
-  let stakeAway = 0;
-  let stakeHome = 0;
+  console.log('Calculating arbitrage...');
+  console.log('bestAwayOdds:', bestAwayOdds);
+  console.log('bestHomeOdds:', bestHomeOdds);
 
-  // Calculate stake for away team
-  if (bestAwayOdds < bestHomeOdds) {
-    stakeAway = 100;
-    stakeHome = (100 * bestAwayOdds) / Math.abs(bestHomeOdds);
-  } else if (bestHomeOdds < bestAwayOdds) {
-    stakeHome = 100;
-    stakeAway = (100 * bestHomeOdds) / Math.abs(bestAwayOdds);
-  }
+  // Convert American odds to implied probabilities
+  const impliedProbAway = americanToProbability(bestAwayOdds);
+  const impliedProbHome = americanToProbability(bestHomeOdds);
+
+  console.log('impliedProbAway:', impliedProbAway);
+  console.log('impliedProbHome:', impliedProbHome);
+
+  // Calculate total implied probability
+  const totalImpliedProb = impliedProbAway + impliedProbHome;
+
+  console.log('totalImpliedProb:', totalImpliedProb);
+
+  // Check if there is an arbitrage opportunity
+  const hasArbitrageOpportunity = totalImpliedProb < 1;
+
+  // Assume a total stake of 100 units (for example)
+  const totalStake = 100;
+
+  // Calculate stakes for each bet
+  const stakeAway = (totalStake * impliedProbAway) / totalImpliedProb;
+  const stakeHome = (totalStake * impliedProbHome) / totalImpliedProb;
+
+  console.log('stakeAway:', stakeAway);
+  console.log('stakeHome:', stakeHome);
 
   // Calculate payouts
-  const payoutAway = stakeAway * bestAwayOdds;
-  const payoutHome = stakeHome * bestHomeOdds;
+  const payoutAway = stakeAway * (bestAwayOdds > 0 ? (bestAwayOdds / 100) + 1 : 1 - (100 / bestAwayOdds));
+  const payoutHome = stakeHome * (bestHomeOdds > 0 ? (bestHomeOdds / 100) + 1 : 1 - (100 / bestHomeOdds));
 
-  // Calculate total stake and total payout
-  const totalStake = stakeAway + stakeHome;
-  const totalPayout = payoutAway + payoutHome;
+  console.log('payoutAway:', payoutAway);
+  console.log('payoutHome:', payoutHome);
 
-  // Calculate profit percentage
-  const profitPercentage = ((totalPayout - totalStake) / totalStake) * 100;
+  // Calculate total payout and profit
+  const totalPayout = Math.min(payoutAway, payoutHome);
+  const profit = totalPayout - totalStake;
+  const profitPercentage = (profit / totalStake) * 100;
+
+  console.log('Arbitrage calculations:', {
+    stakeAway: stakeAway.toFixed(2),
+    stakeHome: stakeHome.toFixed(2),
+    payoutAway: payoutAway.toFixed(2),
+    payoutHome: payoutHome.toFixed(2),
+    totalStake: totalStake.toFixed(2),
+    totalPayout: totalPayout.toFixed(2),
+    profitPercentage: profitPercentage.toFixed(2),
+    hasArbitrageOpportunity
+  });
 
   return {
-    stakeAway,
-    stakeHome,
-    payoutAway,
-    payoutHome,
-    totalStake,
-    totalPayout,
-    profitPercentage
+    stakeAway: stakeAway.toFixed(2),
+    stakeHome: stakeHome.toFixed(2),
+    payoutAway: payoutAway.toFixed(2),
+    payoutHome: payoutHome.toFixed(2),
+    totalStake: totalStake.toFixed(2),
+    totalPayout: totalPayout.toFixed(2),
+    profitPercentage: profitPercentage.toFixed(2),
+    hasArbitrageOpportunity
   };
 };
