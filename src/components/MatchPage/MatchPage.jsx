@@ -1,9 +1,9 @@
 // src/components/MatchPage/MatchPage.js
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
-import { processOddsData } from '../../utils/matchPageCalculations';
+import { arbitrageCalculator, processOddsData } from '../../utils/matchPageCalculations';
 import './MatchPage.css';
 
 const MatchPage = () => {
@@ -22,7 +22,6 @@ const MatchPage = () => {
   
   const processedOdds = useMemo(() => {
     if (!selectedGame) return {};
-
     return processOddsData(selectedGame);
   }, [selectedGame]);
 
@@ -31,6 +30,10 @@ const MatchPage = () => {
   if (!selectedGame) return <p>No game found.</p>;
 
   const { bookmakersData, bestAwayOdds, bestHomeOdds, bestAwayBookmaker, bestHomeBookmaker, averageAwayOdds, averageHomeOdds } = processedOdds;
+
+  const arbitrageCalculatorVariables = processedOdds ? arbitrageCalculator(bestAwayOdds, bestHomeOdds) : null;
+  const { stakeAway, stakeHome, payoutAway, payoutHome, totalStake, totalPayout, profitPercentage } = arbitrageCalculatorVariables || {};
+  console.log('arb calc', arbitrageCalculatorVariables);
 
   return (
     <div>
@@ -71,6 +74,22 @@ const MatchPage = () => {
             </tr>
           </tbody>
         </table>
+      </div>
+      <div className="arbitrage-calculator">
+        <h2>Arbitrage Calculator</h2>
+        <div>
+          <span>Stake for Away Team: ${stakeAway.toFixed(2)}</span>
+          <span>Stake for Home Team: ${stakeHome.toFixed(2)}</span>
+        </div>
+        <div>
+          <span>Payout for Away Team: ${payoutAway.toFixed(2)}</span>
+          <span>Payout for Home Team: ${payoutHome.toFixed(2)}</span>
+        </div>
+        <div>
+          <span>Total Stake: ${totalStake.toFixed(2)}</span>
+          <span>Total Payout: ${totalPayout.toFixed(2)}</span>
+          <span>Profit Percentage: {profitPercentage.toFixed(2)}%</span>
+        </div>
       </div>
     </div>
   );
