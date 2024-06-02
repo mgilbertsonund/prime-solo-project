@@ -13,12 +13,21 @@ function* registerUser(action) {
     // automatically log a user in after registration
     yield put({ type: 'LOGIN', payload: action.payload });
 
+    // call onSuccess callback to navigate to LandingPage
+    if (action.payload.onSuccess) {
+      action.payload.onSuccess();
+    }
+
     // set to 'login' mode so they see the login screen
     // after registration or after they log out
     yield put({ type: 'SET_TO_LOGIN_MODE' });
   } catch (error) {
     console.log('Error with user registration:', error);
-    yield put({ type: 'REGISTRATION_FAILED' });
+    if (error.response && error.response.status === 409) {
+      yield put({ type: 'REGISTRATION_FAILED', payload: 'Username already exists' });
+    } else {
+      yield put({ type: 'REGISTRATION_FAILED', payload: 'Registration failed. Please try again.' });
+    }
   }
 }
 
