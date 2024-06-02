@@ -5,14 +5,13 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
-
 import { useDispatch, useSelector } from 'react-redux';
+
+import './App.css';
 
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
-
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-
 import AboutPage from '../Schedule/Schedule';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
@@ -24,10 +23,7 @@ import Players from '../Players/Players';
 import BetTracker from '../BetTracker/BetTracker';
 import HelpAndResources from '../HelpAndResources/HelpAndResources';
 import MatchPage from '../MatchPage/MatchPage';
-
 import SideNav from '../SideNav/SideNav'; // Import the SideNav component
-
-import './App.css';
 import Schedule from '../Schedule/Schedule';
 
 function App() {
@@ -49,92 +45,47 @@ function App() {
             <Switch>
               <Redirect exact from="/" to="/home" />
 
-              <Route
-                exact
-                path="/schedule"
-              >
+              <Route exact path="/schedule">
                 <Schedule />
               </Route>
 
-              <Route
-                exact
-                path="/standings"
-              >
+              <Route exact path="/standings">
                 <Standings />
               </Route>
 
-              <Route
-                exact
-                path="/players"
-              >
+              <Route exact path="/players">
                 <Players />
               </Route>
 
-              <Route
-                exact
-                path="/bet-tracker"
-              >
+              <Route exact path="/bet-tracker">
                 <BetTracker />
               </Route>
 
-              <Route
-                exact
-                path="/help-&-resources"
-              >
+              <Route exact path="/help-&-resources">
                 <HelpAndResources />
               </Route>
 
-              <ProtectedRoute
-                exact
-                path="/user"
-              >
+              <ProtectedRoute exact path="/user">
                 <UserPage />
               </ProtectedRoute>
 
-              <ProtectedRoute
-                exact
-                path="/info"
-              >
+              <ProtectedRoute exact path="/info">
                 <InfoPage />
               </ProtectedRoute>
 
-              <Route
-                exact
-                path="/login"
-              >
-                {user.id ?
-                  <Redirect to="/user" />
-                  :
-                  <LoginPage />
-                }
+              <Route exact path="/login">
+                {user.id ? <Redirect to="/home" /> : <LoginPage />}
               </Route>
 
-              <Route
-                exact
-                path="/registration"
-              >
-                {user.id ?
-                  <Redirect to="/user" />
-                  :
-                  <RegisterPage />
-                }
+              <Route exact path="/registration">
+                {user.id ? <Redirect to="/home" /> : <RegisterPage />}
               </Route>
 
-              <Route
-                exact
-                path="/home"
-              >
-                {user.id ?
-                  <Redirect to="/user" />
-                  :
-                  <LandingPage />
-                }
+              <Route exact path="/home">
+                <LandingPage />
               </Route>
 
-              <Route
-                exact
-                path="/matches/:matchId" 
-              >
+              <Route exact path="/matches/:matchId">
                 <MatchPage />
               </Route>
 
