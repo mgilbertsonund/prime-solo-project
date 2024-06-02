@@ -20,9 +20,14 @@ function* loginUser(action) {
     // after the user has logged in
     // get the user information from the server
     yield put({ type: 'FETCH_USER' });
+
+    // call onSuccess callback to navigate to LandingPage
+    if (action.payload.onSuccess) {
+      action.payload.onSuccess();
+    }
   } catch (error) {
     console.log('Error with user login:', error);
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       // The 401 is the error status sent from passport
       // if user isn't in the database or
       // if the username and password don't match in the database

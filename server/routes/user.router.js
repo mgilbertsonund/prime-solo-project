@@ -1,7 +1,5 @@
 const express = require('express');
-const {
-  rejectUnauthenticated,
-} = require('../modules/authentication-middleware');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 const encryptLib = require('../modules/encryption');
 const pool = require('../modules/pool');
 const userStrategy = require('../strategies/user.strategy');
@@ -29,21 +27,41 @@ router.post('/registration', (req, res, next) => {
         console.log('User registration failed: username already exists');
         res.status(409).send('Username already exists');
       } else {
-        console.log('User registration failed: ', err);
+        console.error('User registration failed:', err); // Use console.error for error logging
         res.sendStatus(500);
       }
     });
 });
 
 // Handles login form authenticate/login POST
-router.post('/login', userStrategy.authenticate('local'), (req, res) => {
-  res.sendStatus(200);
+router.post('/login', (req, res, next) => {
+  userStrategy.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.error('Login error:', err); // Log the error
+      return next(err);
+    }
+    if (!user) {
+      // User not found or incorrect password
+      console.log('Login failed: user not found or incorrect password');
+      return res.status(401).send(info.message);
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        console.error('Login error after authentication:', err); // Log the error
+        return next(err);
+      }
+      res.sendStatus(200);
+    });
+  })(req, res, next);
 });
 
 // clear all server session information about this user
 router.post('/logout', (req, res, next) => {
   req.logout((err) => {
-    if (err) { return next(err); }
+    if (err) {
+      console.error('Logout error:', err); // Log the error
+      return next(err);
+    }
     res.sendStatus(200);
   });
 });
