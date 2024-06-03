@@ -20,25 +20,16 @@ function Nav() {
             Login / Register
           </Link>
         )}
-
         {/* If a user is logged in, show these links */}
+        {/* ADD IN AN ICON FOR USER */}
         {user.id && (
           <>
             <Link className="navLink" to="/user">
-              Home
+              User
             </Link>
-
-            <Link className="navLink" to="/info">
-              Info Page
-            </Link>
-
             <LogOutButton className="navLink" />
           </>
         )}
-
-        {/* <Link className="navLink" to="/about">
-          About
-        </Link> */}
       </div>
     </div>
   );

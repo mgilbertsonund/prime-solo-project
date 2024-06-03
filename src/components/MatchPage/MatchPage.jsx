@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
 import { arbitrageCalculator, processOddsData } from '../../utils/matchPageCalculations';
-import './MatchPage.css';
+import ArbitrageCalculator from '../ArbitrageCalculator/ArbitrageCalculator';
 
 const MatchPage = () => {
   const { matchId } = useParams();
@@ -33,8 +33,6 @@ const MatchPage = () => {
 
   const { bookmakersData, bestAwayOdds, bestHomeOdds, bestAwayBookmaker, bestHomeBookmaker } = processedOdds;
   const arbitrageCalculatorVariables = processedOdds ? arbitrageCalculator({ bestAwayOdds, bestHomeOdds }) : null;
-  const { stakeAway, stakeHome, payoutAway, payoutHome, totalStake, totalPayout, profitPercentage, hasArbitrageOpportunity } = arbitrageCalculatorVariables || {};
-  const arbitrageStyle = hasArbitrageOpportunity ? 'arbitrage-opportunity' : 'no-arbitrage';
 
   return (
     <div>
@@ -73,28 +71,13 @@ const MatchPage = () => {
           </tbody>
         </table>
       </div>
-      {arbitrageCalculatorVariables && (
-        <div className={`arbitrage-calculator ${arbitrageStyle}`}>
-          <div className="card">
-            <h2>Suggested Bets</h2>
-            <div className="card-content">
-              <div className="card-section">
-                <span>Stake for Away Team: ${stakeAway} - {bestAwayBookmaker}</span>
-                <span>Stake for Home Team: ${stakeHome} - {bestHomeBookmaker}</span>
-              </div>
-              <div className="card-section">
-                <span>Payout for Away Team: ${payoutAway}</span>
-                <span>Payout for Home Team: ${payoutHome}</span>
-              </div>
-              <div className="card-section">
-                <span>Total Stake: ${totalStake}</span>
-                <span>Total Payout: ${totalPayout}</span>
-                <span>Profit Percentage: {profitPercentage}%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ArbitrageCalculator
+        bestAwayOdds={bestAwayOdds}
+        bestHomeOdds={bestHomeOdds}
+        bestAwayBookmaker={bestAwayBookmaker}
+        bestHomeBookmaker={bestHomeBookmaker}
+        arbitrageCalculatorVariables={arbitrageCalculatorVariables}
+      />
     </div>
   );
 };
