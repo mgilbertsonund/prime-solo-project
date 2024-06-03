@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
 import { arbitrageCalculator, processOddsData } from '../../utils/matchPageCalculations';
 import './MatchPage.css';
@@ -8,16 +8,20 @@ import './MatchPage.css';
 const MatchPage = () => {
   const { matchId } = useParams();
   const dispatch = useDispatch();
+  const history = useHistory();
   const { odds, loading, error } = useSelector(state => state.odds);
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
-    if (!odds || odds.length === 0) {
+    if (!user.id) {
+      history.push('/login');
+    } else if (!odds || odds.length === 0) {
       dispatch(fetchOddsRequest());
     }
-  }, [dispatch, odds]);
+  }, [dispatch, odds, user, history]);
 
   const selectedGame = useMemo(() => odds.find(game => game.id === matchId), [odds, matchId]);
-  
+
   const processedOdds = useMemo(() => {
     if (!selectedGame) return {};
     return processOddsData(selectedGame);
