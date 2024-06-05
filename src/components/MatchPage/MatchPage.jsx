@@ -1,9 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
 import { arbitrageCalculator, processOddsData } from '../../utils/matchPageCalculations';
 import ArbitrageCalculator from '../ArbitrageCalculator/ArbitrageCalculator';
+import MatchPageForm from '../MatchPageForm/MatchPageForm'; 
+import './MatchPage.css';
 
 const MatchPage = () => {
   const { matchId } = useParams();
@@ -11,6 +13,8 @@ const MatchPage = () => {
   const history = useHistory();
   const { odds, loading, error } = useSelector(state => state.odds);
   const user = useSelector(state => state.user);
+
+  const [selectedMarket, setSelectedMarket] = useState(null);
 
   useEffect(() => {
     if (!user.id) {
@@ -26,6 +30,10 @@ const MatchPage = () => {
     if (!selectedGame) return {};
     return processOddsData(selectedGame);
   }, [selectedGame]);
+
+  const handleCellClick = (market, bookmaker, oddsPrice) => {
+    setSelectedMarket({ market, bookmaker, oddsPrice, stake: 100 });
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -54,7 +62,11 @@ const MatchPage = () => {
               <th>{selectedGame.away_team}</th>
               <td>{bestAwayOdds} ({bestAwayBookmaker})</td>
               {bookmakersData.map(bookmaker => (
-                <td key={`${bookmaker.key}-away`} className={bookmaker.isBetterAway ? 'better-odds' : ''}>
+                <td
+                  key={`${bookmaker.key}-away`}
+                  className={bookmaker.isBetterAway ? 'better-odds' : ''}
+                  onClick={() => handleCellClick(`${selectedGame.away_team} Moneyline`, bookmaker.title, bookmaker.awayPrice)}
+                >
                   {bookmaker.awayPrice || 'N/A'}
                 </td>
               ))}
@@ -63,7 +75,11 @@ const MatchPage = () => {
               <th>{selectedGame.home_team}</th>
               <td>{bestHomeOdds} ({bestHomeBookmaker})</td>
               {bookmakersData.map(bookmaker => (
-                <td key={`${bookmaker.key}-home`} className={bookmaker.isBetterHome ? 'better-odds' : ''}>
+                <td
+                  key={`${bookmaker.key}-home`}
+                  className={bookmaker.isBetterHome ? 'better-odds' : ''}
+                  onClick={() => handleCellClick(`${selectedGame.home_team} Moneyline`, bookmaker.title, bookmaker.homePrice)}
+                >
                   {bookmaker.homePrice || 'N/A'}
                 </td>
               ))}
@@ -78,6 +94,12 @@ const MatchPage = () => {
         bestHomeBookmaker={bestHomeBookmaker}
         arbitrageCalculatorVariables={arbitrageCalculatorVariables}
       />
+      {selectedMarket && (
+        <MatchPageForm
+          selectedMarket={selectedMarket}
+          onCancel={() => setSelectedMarket(null)}
+        />
+      )}
     </div>
   );
 };
