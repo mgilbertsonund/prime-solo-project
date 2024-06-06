@@ -11,8 +11,8 @@ const MatchPage = () => {
   const { matchId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { odds, loading, error } = useSelector(state => state.odds);
-  const user = useSelector(state => state.user);
+  const { odds, loading, error } = useSelector(store => store.odds);
+  const user = useSelector(store => store.user);
 
   const [selectedMarket, setSelectedMarket] = useState(null);
 

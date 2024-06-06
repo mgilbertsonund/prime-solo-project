@@ -13,7 +13,7 @@ const divisionNames = {
 
 const Standings = () => {
   const dispatch = useDispatch();
-  const { alStandings, nlStandings, loading, error } = useSelector(state => state.standings);
+  const { alStandings, nlStandings, loading, error } = useSelector(store => store.standings);
 
 
   useEffect(() => {

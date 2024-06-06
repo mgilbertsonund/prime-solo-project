@@ -1,7 +1,7 @@
 import React from 'react';
 import './ArbitrageCalculator.css';
 
-const ArbitrageCalculator = ({ bestAwayOdds, bestHomeOdds, bestAwayBookmaker, bestHomeBookmaker, arbitrageCalculatorVariables }) => {
+const ArbitrageCalculator = ({ bestAwayBookmaker, bestHomeBookmaker, arbitrageCalculatorVariables }) => {
   if (!arbitrageCalculatorVariables) return null;
 
   const { stakeAway, stakeHome, payoutAway, payoutHome, totalStake, totalPayout, profitPercentage, hasArbitrageOpportunity } = arbitrageCalculatorVariables;
@@ -10,7 +10,7 @@ const ArbitrageCalculator = ({ bestAwayOdds, bestHomeOdds, bestAwayBookmaker, be
   return (
     <div className={`arbitrage-calculator ${arbitrageStyle}`}>
       <div className="card">
-        <h2>Suggested Bets</h2>
+        <h2>Suggested Arbitrage Bets</h2>
         <div className="card-content">
           <div className="card-section">
             <span>Stake for Away Team: ${stakeAway} - {bestAwayBookmaker}</span>

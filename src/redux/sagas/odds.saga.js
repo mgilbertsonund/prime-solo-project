@@ -7,7 +7,7 @@ import {
   // setLastFetchTime,
 } from '../actions/odds.actions';
 
-const getLastFetchTime = (state) => state.odds.lastFetchTime;
+// const getLastFetchTime = (state) => state.odds.lastFetchTime;
 
 function* fetchOdds() {
   try {

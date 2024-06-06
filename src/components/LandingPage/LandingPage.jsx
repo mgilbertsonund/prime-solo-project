@@ -7,8 +7,8 @@ import { calculateAverageAmericanOdds } from '../../utils/oddsCalculations';
 const LandingPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { odds, loading, error } = useSelector(state => state.odds);
-  const user = useSelector(state => state.user);
+  const { odds, loading, error } = useSelector(store => store.odds);
+  const user = useSelector(store => store.user);
 
   useEffect(() => {
     dispatch(fetchOddsRequest());

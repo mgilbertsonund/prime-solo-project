@@ -3,7 +3,6 @@
   }
   
   .arbitrage-calculator .card {
-    background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -21,7 +20,7 @@
   }
   
   .no-arbitrage .card {
-    border: 5px solid red;
+    border: 2px solid #F05454;
   }
   
   .arbitrage-calculator .card-content {

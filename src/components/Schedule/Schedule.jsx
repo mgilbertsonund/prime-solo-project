@@ -6,7 +6,7 @@ import { fetchScheduleRequest } from '../../redux/actions/schedule.actions';
 const Schedule = () => {
   const [rowsToShow, setRowsToShow] = useState(20);
   const dispatch = useDispatch();
-  const { schedule, loading, error } = useSelector(state => state.schedule);
+  const { schedule, loading, error } = useSelector(store => store.schedule);
 
   useEffect(() => {
     dispatch(fetchScheduleRequest());

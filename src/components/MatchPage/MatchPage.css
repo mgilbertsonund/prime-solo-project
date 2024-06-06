@@ -20,11 +20,17 @@
   background-color: #f2f2f2;
   position: sticky;
   top: 0;
+  color: black
 }
 
 .better-odds {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #00ff3c;
+  color: #000000;
+}
+
+.best-bookmaker-odds {
+  background-color: #00ff3c;
+  color: #000000;
 }
 
 
