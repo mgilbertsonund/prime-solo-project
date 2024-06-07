@@ -12,7 +12,7 @@ import './App.css';
 import Nav from '../Nav/Nav';
 import Footer from '../Footer/Footer';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import AboutPage from '../Schedule/Schedule';
+// import AboutPage from '../Schedule/Schedule';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
@@ -23,12 +23,11 @@ import Players from '../Players/Players';
 import BetTracker from '../BetTracker/BetTracker';
 import HelpAndResources from '../HelpAndResources/HelpAndResources';
 import MatchPage from '../MatchPage/MatchPage';
-import SideNav from '../SideNav/SideNav'; // Import the SideNav component
 import Schedule from '../Schedule/Schedule';
+import MainLayout from '../MainLayout/MainLayout'; 
 
 function App() {
   const dispatch = useDispatch();
-
   const user = useSelector(store => store.user);
 
   useEffect(() => {
@@ -39,61 +38,76 @@ function App() {
     <Router>
       <div className="app-container">
         <Nav />
-        <div className="main-content">
-          <SideNav />
-          <div className="content">
-            <Switch>
-              <Redirect exact from="/" to="/home" />
+        <div className="app-body">
+          <Switch>
+            <Redirect exact from="/" to="/home" />
 
-              <Route exact path="/schedule">
+            <Route exact path="/schedule">
+              <MainLayout>
                 <Schedule />
-              </Route>
+              </MainLayout>
+            </Route>
 
-              <Route exact path="/standings">
+            <Route exact path="/standings">
+              <MainLayout>
                 <Standings />
-              </Route>
+              </MainLayout>
+            </Route>
 
-              <Route exact path="/players">
+            <Route exact path="/players">
+              <MainLayout>
                 <Players />
-              </Route>
+              </MainLayout>
+            </Route>
 
-              <Route exact path="/bet-tracker">
+            <Route exact path="/bet-tracker">
+              <MainLayout>
                 <BetTracker />
-              </Route>
+              </MainLayout>
+            </Route>
 
-              <Route exact path="/help-&-resources">
+            <Route exact path="/help-&-resources">
+              <MainLayout>
                 <HelpAndResources />
-              </Route>
+              </MainLayout>
+            </Route>
 
-              <ProtectedRoute exact path="/user">
+            <ProtectedRoute exact path="/user">
+              <MainLayout>
                 <UserPage />
-              </ProtectedRoute>
+              </MainLayout>
+            </ProtectedRoute>
 
-              <ProtectedRoute exact path="/info">
+            <ProtectedRoute exact path="/info">
+              <MainLayout>
                 <InfoPage />
-              </ProtectedRoute>
+              </MainLayout>
+            </ProtectedRoute>
 
-              <Route exact path="/login">
-                {user.id ? <Redirect to="/home" /> : <LoginPage />}
-              </Route>
+            <Route exact path="/login">
+              {user.id ? <Redirect to="/home" /> : <LoginPage />}
+            </Route>
 
-              <Route exact path="/registration">
-                {user.id ? <Redirect to="/home" /> : <RegisterPage />}
-              </Route>
+            <Route exact path="/registration">
+              {user.id ? <Redirect to="/home" /> : <RegisterPage />}
+            </Route>
 
-              <Route exact path="/home">
+            <Route exact path="/home">
+              <MainLayout>
                 <LandingPage />
-              </Route>
+              </MainLayout>
+            </Route>
 
-              <Route exact path="/matches/:matchId">
+            <Route exact path="/matches/:matchId">
+              <MainLayout>
                 <MatchPage />
-              </Route>
+              </MainLayout>
+            </Route>
 
-              <Route>
-                <h1>404</h1>
-              </Route>
-            </Switch>
-          </div>
+            <Route>
+              <h1>404</h1>
+            </Route>
+          </Switch>
         </div>
         <Footer />
       </div>
