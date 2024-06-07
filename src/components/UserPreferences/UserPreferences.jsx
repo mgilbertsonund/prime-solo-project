@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './UserPreferences.css';
 
 const UserPreferences = () => {
     const [bookmakers, setBookmakers] = useState([]);
     const [selectedBookmakers, setSelectedBookmakers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [saved, setSaved] = useState(false); // State to track if preferences were saved successfully
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,10 +39,10 @@ const UserPreferences = () => {
 
     const handleSavePreferences = async () => {
         try {
-            await axios.post('/api/user/preferences', {
+            await axios.post('/api/user/bookmaker-preferences', {
                 preferences: selectedBookmakers,
             });
-            // Optionally update local state or show a success message
+            setSaved(true); // Update state to indicate preferences were saved successfully
         } catch (error) {
             // Handle error
         }
@@ -52,21 +54,25 @@ const UserPreferences = () => {
     return (
         <div className="user-preferences">
             <h2>Manage Your Bookmaker Preferences</h2>
-            <ul className="bookmakers-list">
-                {bookmakers.map((bookmaker) => (
-                    <li key={bookmaker.bookmaker_id}>
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={selectedBookmakers.includes(bookmaker.bookmaker_id)}
-                                onChange={() => handleToggleBookmaker(bookmaker.bookmaker_id)}
-                            />
-                            {bookmaker.bookmaker_name}
-                        </label>
-                    </li>
-                ))}
-            </ul>
-            <button onClick={handleSavePreferences}>Save Preferences</button>
+            {saved && <p>Preferences saved successfully!</p>}
+            <div>
+                <h3>Edit Bookmakers:</h3>
+                <ul className="bookmakers-list">
+                    {bookmakers.map((bookmaker) => (
+                        <li key={bookmaker.bookmaker_id}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={selectedBookmakers.includes(bookmaker.bookmaker_id)}
+                                    onChange={() => handleToggleBookmaker(bookmaker.bookmaker_id)}
+                                />
+                                {bookmaker.bookmaker_name}
+                            </label>
+                        </li>
+                    ))}
+                </ul>
+                <button onClick={handleSavePreferences}>Save Preferences</button>
+            </div>
         </div>
     );
 };

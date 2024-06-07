@@ -1,0 +1,23 @@
+.bookmakers-list {
+    list-style: none;
+    padding: 0;
+}
+
+.bookmakers-list li {
+    margin-bottom: 10px;
+}
+
+.bookmakers-list label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.bookmakers-list input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.bookmakers-list label.selected {
+    font-weight: bold;
+    color: #007bff; /* Change to your desired color */
+}
