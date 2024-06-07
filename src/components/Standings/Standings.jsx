@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchStandingsRequest } from '../../redux/actions/standings.actions';
+import './Standings.css'; // Import the CSS file
 
 const divisionNames = {
-    200: 'AL West',
-    201: 'AL East',
-    202: 'AL Central',
-    203: 'NL West',
-    204: 'NL East',
-    205: 'NL Central',
+  200: 'AL West',
+  201: 'AL East',
+  202: 'AL Central',
+  203: 'NL West',
+  204: 'NL East',
+  205: 'NL Central',
 };
 
 const Standings = () => {
   const dispatch = useDispatch();
   const { alStandings, nlStandings, loading, error } = useSelector(store => store.standings);
-
 
   useEffect(() => {
     dispatch(fetchStandingsRequest());
@@ -24,7 +24,7 @@ const Standings = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   const renderStandings = (standings, leagueName) => (
-    <div>
+    <div className="standings-container">
       <h2>{leagueName} Standings</h2>
       {standings.map(record => (
         <div key={record.division.id}>
@@ -35,17 +35,17 @@ const Standings = () => {
                 <th>Team</th>
                 <th>Wins</th>
                 <th>Losses</th>
-                <th>Win Percentage</th>
+                <th>Win %</th>
                 <th>GB</th>
                 <th>WCGB</th>
                 <th>L10</th>
                 <th>Streak</th>
                 <th>Runs Scored</th>
                 <th>Runs Against</th>
-                <th>Run Differential</th>
-                <th>Expected Win/Loss</th>
-                <th>Home Record</th>
-                <th>Away Record</th>
+                <th>Run Diff</th>
+                <th>Exp W/L</th>
+                <th>Home</th>
+                <th>Away</th>
               </tr>
             </thead>
             <tbody>

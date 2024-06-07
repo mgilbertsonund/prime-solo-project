@@ -1,18 +1,18 @@
-/* Schedule Component CSS */
+/* Standings Component CSS */
 
-/* Container for the Schedule */
-.schedule-container {
+/* Main Container */
+.standings-container {
     padding: 20px;
     background-color: #222831; /* Main background color */
     color: #DDDDDD; /* Text color */
     border-radius: 8px; /* Smooth corners */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    max-width: 1000px; /* Limit the width */
+    max-width: 1200px; /* Limit the width */
     margin: 0 auto; /* Center the container */
   }
   
-  /* Heading */
-  .schedule-container h2 {
+  /* Heading Styles */
+  .standings-container h2 {
     text-align: center;
     color: #F05454; /* Highlighted heading color */
     margin-bottom: 20px;
@@ -21,90 +21,72 @@
     padding-bottom: 10px;
   }
   
-  /* Table Styling */
-  .schedule {
+  .standings-container h3 {
+    color: #222831; /* Sub-heading color */
+    background-color: #DDDDDD; /* Sub-heading background */
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  /* Table Styles */
+  .standings {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px; /* Space below table */
   }
   
   /* Table Header */
-  .schedule thead {
+  .standings thead {
     background-color: #30475E; /* Header background */
     color: #DDDDDD; /* Header text color */
   }
   
-  .schedule th {
+  .standings th {
     padding: 10px;
     font-weight: bold;
     text-align: left; /* Align text to the left */
     border-bottom: 2px solid #222831; /* Header bottom border */
+    white-space: nowrap; /* Prevent text wrapping */
   }
   
   /* Table Rows */
-  .schedule tbody tr {
+  .standings tbody tr {
     background-color: #222831; /* Row background color */
     border-bottom: 1px solid #30475E; /* Row border */
   }
   
-  .schedule tbody tr:nth-child(even) {
+  .standings tbody tr:nth-child(even) {
     background-color: #30475E; /* Alternate row color */
   }
   
-  .schedule td {
+  .standings td {
     padding: 10px;
     border-bottom: 1px solid #222831; /* Row bottom border */
+    white-space: nowrap; /* Prevent text wrapping */
   }
   
-  .schedule td:first-child {
-    width: 50%; /* First column width */
+  .standings td:first-child {
+    font-weight: bold; /* Highlight the team name */
   }
   
-  .schedule td:last-child {
-    width: 30%; /* Last column width */
-  }
-  
-  /* Load More Button */
-  .load-more-btn {
-    display: block;
-    width: 100%;
-    padding: 10px 20px;
-    background-color: #F05454; /* Button background */
-    color: #DDDDDD; /* Button text color */
-    border: none;
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer;
-    font-size: 1rem; /* Font size */
-    text-align: center;
-    transition: background-color 0.3s; /* Smooth transition */
-  }
-  
-  .load-more-btn:hover {
-    background-color: #DDDDDD; /* Hover background */
-    color: #F05454; /* Hover text color */
+  .standings td:last-child {
+    text-align: right; /* Align last column to the right */
   }
   
   /* Responsive Design */
   @media (max-width: 768px) {
-    .schedule-container {
+    .standings-container {
       padding: 10px; /* Reduce padding on small screens */
     }
   
-    .schedule th, .schedule td {
+    .standings th, .standings td {
       padding: 8px; /* Reduce cell padding on small screens */
-    }
-  
-    .schedule th {
-      font-size: 0.9rem; /* Smaller font for table headers */
-    }
-  
-    .schedule td {
       font-size: 0.8rem; /* Smaller font for table cells */
     }
   
-    .load-more-btn {
-      padding: 8px; /* Reduce button padding */
-      font-size: 0.9rem; /* Smaller button text */
+    .standings th {
+      font-size: 0.9rem; /* Smaller font for table headers */
     }
   }
   

@@ -1,16 +1,17 @@
-import react, { useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import './MatchPageForm.css';
+import './MatchPageForm.css'; // Import the CSS file
 
 const MatchPageForm = ({ selectedMarket, onCancel }) => {
     const [stake, setStake] = useState(selectedMarket.stake);
     const dispatch = useDispatch();
+    console.log(selectedMarket)
     
     const handleSave = () => {
         const betData = {
             market: selectedMarket.market,
             bookmaker: selectedMarket.bookmaker,
-            odds: selectedMarket.odds,
+            odds: selectedMarket.oddsPrice,
             stake: parseInt(stake, 10),
         };
 
@@ -33,7 +34,7 @@ const MatchPageForm = ({ selectedMarket, onCancel }) => {
                     </div>
                     <div>
                         <label>Odds:</label>
-                        <span>{selectedMarket.odds}</span>
+                        <span>{selectedMarket.oddsPrice}</span>
                     </div>
                     <div>
                         <label>Stake:</label>

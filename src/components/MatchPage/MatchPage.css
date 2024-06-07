@@ -1,36 +1,108 @@
-/* MatchPage.css */
-.scroll-container {
-  overflow-x: auto;
-  width: 100%;
+/* MatchPage Component CSS */
+
+/* Container Styles */
+.match-container {
+  padding: 20px;
+  background-color: #222831; /* Main background color */
+  color: #DDDDDD; /* Text color */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  max-width: 1200px; /* Limit the width */
+  margin: 0 auto; /* Center the container */
 }
 
+/* Header Styles */
+.match-container h2, .match-container h3 {
+  text-align: center;
+  color: #F05454; /* Highlighted header color */
+  margin-bottom: 20px;
+}
+
+.match-container h4 {
+  font-size: 2.5rem; /* Larger font for main title */
+  margin-bottom: 10px;
+}
+
+.match-container h3 {
+  font-size: 1.8rem; /* Slightly smaller for subtitles */
+  border-bottom: 2px solid #30475E; /* Bottom border for subtitle */
+  padding-bottom: 10px;
+}
+
+/* Scrollable Table Container */
+.scroll-container {
+  overflow-x: auto; /* Allow horizontal scrolling */
+  margin-bottom: 20px; /* Space below table */
+  background-color: #30475E; /* Background color for table container */
+  border-radius: 8px; /* Smooth corners for container */
+  padding: 10px; /* Padding inside container */
+}
+
+/* Table Styles */
 .scroll-table {
   width: 100%;
-  border-collapse: collapse;
-  min-width: 800px; /* Ensure table is wide enough to require scrolling */
+  border-collapse: collapse; /* Remove spacing between cells */
 }
 
-.scroll-table th, .scroll-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
+/* Table Header */
+.scroll-table thead {
+  background-color: #222831; /* Header background */
+  color: #DDDDDD; /* Header text color */
 }
 
 .scroll-table th {
-  background-color: #f2f2f2;
-  position: sticky;
-  top: 0;
-  color: black
+  padding: 15px;
+  font-weight: bold;
+  text-align: center; /* Center align text */
+  border-bottom: 2px solid #F05454; /* Bottom border for header */
+  white-space: nowrap; /* Prevent wrapping */
 }
 
-.better-odds {
-  background-color: #00ff3c;
-  color: #000000;
+/* Table Rows */
+.scroll-table tbody tr {
+  background-color: #30475E; /* Row background color */
+  border-bottom: 1px solid #222831; /* Row bottom border */
 }
 
-.best-bookmaker-odds {
-  background-color: #00ff3c;
-  color: #000000;
+.scroll-table tbody tr:nth-child(even) {
+  background-color: #222831; /* Alternate row color */
 }
 
+.scroll-table td {
+  padding: 10px;
+  text-align: center; /* Center align text */
+  border-bottom: 1px solid #30475E; /* Bottom border for cells */
+  white-space: nowrap; /* Prevent wrapping */
+  cursor: pointer; /* Change cursor to pointer */
+}
 
+.scroll-table td:hover {
+  background-color: #F05454; /* Highlight on hover */
+  color: #DDDDDD; /* Change text color on hover */
+}
+
+.scroll-table .better-odds {
+  background-color: #4CAF50; /* Green background for better odds */
+  color: #DDDDDD; /* White text color */
+  font-weight: bold; /* Bold text */
+}
+
+.scroll-table .better-odds:hover {
+  background-color: #3e8e41; /* Darker green on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .match-container {
+    padding: 10px; /* Reduce padding on small screens */
+  }
+
+  .scroll-table th, .scroll-table td {
+    padding: 8px; /* Reduce padding on small screens */
+    font-size: 0.8rem; /* Smaller font for cells */
+  }
+
+  .scroll-table th {
+    font-size: 0.9rem; /* Smaller font for headers */
+  }
+}

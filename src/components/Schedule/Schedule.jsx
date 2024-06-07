@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchScheduleRequest } from '../../redux/actions/schedule.actions';
+import './Schedule.css'; // Import the CSS file
 
 const Schedule = () => {
   const [rowsToShow, setRowsToShow] = useState(20);
@@ -24,7 +25,7 @@ const Schedule = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
+    <div className="schedule-container">
       <h2>MLB Games</h2>
       <table className="schedule">
         <thead>
@@ -46,11 +47,10 @@ const Schedule = () => {
         </tbody>
       </table>
       {rowsToShow < schedule.length && (
-        <button onClick={loadMoreGames}>Load More</button>
+        <button className="load-more-btn" onClick={loadMoreGames}>Load More</button>
       )}
     </div>
   );
 };
 
 export default Schedule;
-

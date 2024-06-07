@@ -4,8 +4,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
 import { arbitrageCalculator, processOddsData } from '../../utils/matchPageCalculations';
 import ArbitrageCalculator from '../ArbitrageCalculator/ArbitrageCalculator';
-import MatchPageForm from '../MatchPageForm/MatchPageForm'; 
-import './MatchPage.css';
+import MatchPageForm from '../MatchPageForm/MatchPageForm';
+import './MatchPage.css'; // Import the CSS file
 
 const MatchPage = () => {
   const { matchId } = useParams();
@@ -43,7 +43,7 @@ const MatchPage = () => {
   const arbitrageCalculatorVariables = processedOdds ? arbitrageCalculator({ bestAwayOdds, bestHomeOdds }) : null;
 
   return (
-    <div>
+    <div className="match-container">
       <h2>{selectedGame.away_team} vs. {selectedGame.home_team}</h2>
       <h3>Bookmaker Odds</h3>
       <div className="scroll-container">
@@ -88,6 +88,8 @@ const MatchPage = () => {
         </table>
       </div>
       <ArbitrageCalculator
+        awayTeam={selectedGame.away_team}
+        homeTeam={selectedGame.home_team}
         bestAwayOdds={bestAwayOdds}
         bestHomeOdds={bestHomeOdds}
         bestAwayBookmaker={bestAwayBookmaker}

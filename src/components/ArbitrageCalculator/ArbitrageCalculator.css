@@ -1,39 +1,49 @@
+/* ArbitrageCalculator Component CSS */
+
+/* Container Styles */
 .arbitrage-calculator {
-    margin-top: 20px;
-  }
-  
-  .arbitrage-calculator .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 10px 0;
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .arbitrage-calculator .card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .arbitrage-opportunity .card {
-    border: 5px solid green;
-  }
-  
-  .no-arbitrage .card {
-    border: 2px solid #F05454;
-  }
-  
-  .arbitrage-calculator .card-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .arbitrage-calculator .card-section {
-    margin-bottom: 10px;
-  }
-  
-  .arbitrage-calculator .card-section span {
-    display: block;
-    margin: 5px 0;
-  }
-  
+  margin-top: 20px;
+}
+
+/* Card Styles */
+.card {
+  background-color: #222831; /* Main background color */
+  color: #DDDDDD; /* Text color */
+  border-radius: 8px; /* Rounded corners */
+  padding: 20px; /* Padding inside card */
+}
+
+/* Header Styles */
+.card h2 {
+  color: #F05454; /* Highlighted header color */
+  margin-bottom: 10px; /* Space below header */
+}
+
+/* Card Content Styles */
+.card-content {
+  display: flex;
+  flex-wrap: wrap; /* Allow content to wrap */
+}
+
+/* Card Section Styles */
+.card-section {
+  flex: 1; /* Equal width for sections */
+  margin-right: 5px; /* Space between sections */
+  margin-bottom: 5px; /* Space below sections */
+  text-align: center;
+}
+
+.card-section span {
+  display: block; /* Each item on a new line */
+  margin-bottom: 10px; /* Space between items */
+}
+
+/* Arbitrage Opportunity Styles */
+.arbitrage-opportunity {
+  border: 2px solid #28a745; /* Green border for arbitrage opportunity */
+}
+
+/* No Arbitrage Opportunity Styles */
+.no-arbitrage {
+  border: 2px solid #F05454; /* Red border for no arbitrage opportunity */
+}
