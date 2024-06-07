@@ -1,23 +1,95 @@
+.user-preferences {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #30475E;
+    border-radius: 8px;
+    background-color: #222831;
+}
+
+.preferences-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.bookmakers-section {
+    width: 45%;
+}
+
 .bookmakers-list {
     list-style: none;
     padding: 0;
 }
 
 .bookmakers-list li {
-    margin-bottom: 10px;
-}
-
-.bookmakers-list label {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    cursor: pointer;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #30475E;
+    border-radius: 4px;
+    background-color: #F05454;
 }
 
-.bookmakers-list input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-.bookmakers-list label.selected {
+.bookmakers-list.active li {
     font-weight: bold;
-    color: #007bff; /* Change to your desired color */
+    background-color: #F05454; 
+}
+
+.bookmakers-list.non-active li {
+    font-weight: normal;
+    background-color: #222831;
+}
+
+.bookmakers-list li span {
+    flex-grow: 1;
+}
+
+.bookmakers-list li button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #DDDDDD;
+    color: #222831;
+}
+
+.bookmakers-list li button:hover {
+    background-color: #30475E;
+    color: #DDDDDD;
+}
+
+.preferences-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.preferences-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.preferences-actions button:first-child {
+    background-color: #222831;
+    color: white;
+    border: 1px solid #30475E;
+}
+
+.preferences-actions button:first-child:hover {
+    background-color: #30475E;
+}
+
+.preferences-actions button:last-child {
+    background-color: #F05454;
+    color: white;
+}
+
+.preferences-actions button:last-child:hover {
+    background-color: #114e1e;
 }

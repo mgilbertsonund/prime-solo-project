@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './UserPreferences.css';
+import './UserPreferences.css'; // Import your CSS for styling
 
 const UserPreferences = () => {
     const [bookmakers, setBookmakers] = useState([]);
-    const [selectedBookmakers, setSelectedBookmakers] = useState([]);
+    const [activeBookmakers, setActiveBookmakers] = useState([]);
+    const [nonActiveBookmakers, setNonActiveBookmakers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [saved, setSaved] = useState(false); // State to track if preferences were saved successfully
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,9 +16,14 @@ const UserPreferences = () => {
                 const bookmakersResponse = await axios.get('/api/bookmakers');
                 setBookmakers(bookmakersResponse.data);
 
-                // Fetch user preferences (assuming you have an API endpoint for this)
                 const preferencesResponse = await axios.get('/api/user/bookmaker-preferences');
-                setSelectedBookmakers(preferencesResponse.data.preferences || []);
+                const activeDetails = preferencesResponse.data || [];
+
+                setActiveBookmakers(activeDetails);
+
+                const activeIds = activeDetails.map(bm => bm.bookmaker_id);
+                const nonActive = bookmakersResponse.data.filter(bm => !activeIds.includes(bm.bookmaker_id));
+                setNonActiveBookmakers(nonActive);
 
                 setLoading(false);
             } catch (error) {
@@ -29,22 +35,27 @@ const UserPreferences = () => {
         fetchData();
     }, []);
 
-    const handleToggleBookmaker = (bookmakerId) => {
-        setSelectedBookmakers(prevState =>
-            prevState.includes(bookmakerId)
-                ? prevState.filter(id => id !== bookmakerId)
-                : [...prevState, bookmakerId]
-        );
+    const handleAddBookmaker = (bookmakerId) => {
+        const addedBookmaker = nonActiveBookmakers.find(bm => bm.bookmaker_id === bookmakerId);
+        setActiveBookmakers(prevState => [...prevState, addedBookmaker]);
+        setNonActiveBookmakers(prevState => prevState.filter(bm => bm.bookmaker_id !== bookmakerId));
+    };
+
+    const handleRemoveBookmaker = (bookmakerId) => {
+        const removedBookmaker = activeBookmakers.find(bm => bm.bookmaker_id === bookmakerId);
+        setActiveBookmakers(prevState => prevState.filter(bm => bm.bookmaker_id !== bookmakerId));
+        setNonActiveBookmakers(prevState => [...prevState, removedBookmaker]);
     };
 
     const handleSavePreferences = async () => {
         try {
+            const activeIds = activeBookmakers.map(bm => bm.bookmaker_id);
             await axios.post('/api/user/bookmaker-preferences', {
-                preferences: selectedBookmakers,
+                preferences: activeIds,
             });
-            setSaved(true); // Update state to indicate preferences were saved successfully
+            setIsEditing(false); // Exit edit mode after saving
         } catch (error) {
-            // Handle error
+            setError(error.message);
         }
     };
 
@@ -54,24 +65,43 @@ const UserPreferences = () => {
     return (
         <div className="user-preferences">
             <h2>Manage Your Bookmaker Preferences</h2>
-            {saved && <p>Preferences saved successfully!</p>}
-            <div>
-                <h3>Edit Bookmakers:</h3>
-                <ul className="bookmakers-list">
-                    {bookmakers.map((bookmaker) => (
-                        <li key={bookmaker.bookmaker_id}>
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedBookmakers.includes(bookmaker.bookmaker_id)}
-                                    onChange={() => handleToggleBookmaker(bookmaker.bookmaker_id)}
-                                />
-                                {bookmaker.bookmaker_name}
-                            </label>
-                        </li>
-                    ))}
-                </ul>
-                <button onClick={handleSavePreferences}>Save Preferences</button>
+            <div className="preferences-container">
+                <div className="bookmakers-section">
+                    <h3>Active Bookmakers</h3>
+                    <ul className="bookmakers-list active">
+                        {activeBookmakers.map(bookmaker => (
+                            <li key={bookmaker.bookmaker_id}>
+                                <span>{bookmaker.bookmaker_name}</span>
+                                {isEditing && (
+                                    <button onClick={() => handleRemoveBookmaker(bookmaker.bookmaker_id)}>Remove</button>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {isEditing && (
+                    <div className="bookmakers-section">
+                        <h3>Non-Active Bookmakers</h3>
+                        <ul className="bookmakers-list non-active">
+                            {nonActiveBookmakers.map(bookmaker => (
+                                <li key={bookmaker.bookmaker_id}>
+                                    <span>{bookmaker.bookmaker_name}</span>
+                                    <button onClick={() => handleAddBookmaker(bookmaker.bookmaker_id)}>Add</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+
+            <div className="preferences-actions">
+                <button onClick={() => setIsEditing(!isEditing)}>
+                    {isEditing ? 'Cancel' : 'Edit Bookmakers'}
+                </button>
+                {isEditing && (
+                    <button onClick={handleSavePreferences}>Save Preferences</button>
+                )}
             </div>
         </div>
     );

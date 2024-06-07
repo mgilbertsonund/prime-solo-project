@@ -5,14 +5,24 @@ const router = express.Router();
 // GET user preferences
 router.get('/', (req, res) => {
     const userId = req.user.id;
-    const queryText = `SELECT bookmaker_id FROM user_bookmaker_preferences WHERE user_id = $1;`;
+
+    const queryText = `
+        SELECT b.bookmaker_id, b.bookmaker_name
+        FROM user_bookmaker_preferences up
+        JOIN bookmakers b ON up.bookmaker_id = b.bookmaker_id
+        WHERE up.user_id = $1;
+    `;
+
     pool.query(queryText, [userId])
-        .then(result => res.send(result.rows.map(row => row.bookmaker_id)))
+        .then(result => {
+            res.send(result.rows); 
+        })
         .catch(err => {
             console.error('Error fetching user preferences:', err.message);
             res.sendStatus(500);
         });
 });
+
 
 // POST user preferences
 router.post('/', (req, res) => {
