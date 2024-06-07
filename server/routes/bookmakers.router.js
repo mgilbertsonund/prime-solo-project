@@ -6,14 +6,14 @@ router.get('/', (req, res) => {
     const queryText = 'SELECT * FROM bookmakers ORDER BY bookmaker_id;';
     pool.query(queryText)
         .then((result) => {
-            res.send(result.rows);
-            res.sendStatus(200);
+            res.status(200).send(result.rows); 
         })
         .catch(err => {
             console.error('Error in GET bookmakers', err);
-            res.sendStatus(500);
-        })
+            res.status(500).send('Internal Server Error'); 
+        });
 });
+
 
 // router.post('/', (req, res) => {
 //     const userId = req.user.id;

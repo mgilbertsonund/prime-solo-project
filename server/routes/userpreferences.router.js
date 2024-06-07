@@ -3,20 +3,20 @@ const pool = require('../modules/pool');
 const router = express.Router();
 
 // GET user preferences
-router.get('/:userId', (req, res) => {
-    const userId = req.params.userId;
+router.get('/', (req, res) => {
+    const userId = req.user.id;
     const queryText = `SELECT bookmaker_id FROM user_bookmaker_preferences WHERE user_id = $1;`;
     pool.query(queryText, [userId])
         .then(result => res.send(result.rows.map(row => row.bookmaker_id)))
         .catch(err => {
-            console.error('Error fetching user preferences', err);
+            console.error('Error fetching user preferences:', err.message);
             res.sendStatus(500);
         });
 });
 
 // POST user preferences
-router.post('/:userId', (req, res) => {
-    const userId = req.params.userId;
+router.post('/', (req, res) => {
+    const userId = req.user.id; // Assuming user ID is stored in req.user after authentication
     const { preferences } = req.body;
 
     // Start a transaction
@@ -37,7 +37,7 @@ router.post('/:userId', (req, res) => {
         .then(() => pool.query('COMMIT')) // Commit transaction
         .then(() => res.sendStatus(200))
         .catch(err => {
-            console.error('Error updating user preferences', err);
+            console.error('Error updating user preferences:', err.message);
             pool.query('ROLLBACK'); // Rollback transaction in case of error
             res.sendStatus(500);
         });

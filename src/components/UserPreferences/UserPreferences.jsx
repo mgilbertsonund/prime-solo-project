@@ -3,40 +3,34 @@ import axios from 'axios';
 
 const UserPreferences = () => {
     const [bookmakers, setBookmakers] = useState([]);
-    const [userPreferences, setUserPreferences] = useState([]);
+    const [selectedBookmakers, setSelectedBookmakers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [selectedBookmakers, setSelectedBookmakers] = useState([]);
 
     useEffect(() => {
-        const fetchBookmakers = async () => {
+        const fetchData = async () => {
             try {
-                const response = await axios.get('/api/bookmakers');
-                setBookmakers(response.data);
-            } catch (error) {
-                setError(error.message);
-            }
-        };
+                const bookmakersResponse = await axios.get('/api/bookmakers');
+                setBookmakers(bookmakersResponse.data);
 
-        const fetchUserPreferences = async () => {
-            try {
-                const response = await axios.get('/api/user/preferences');
-                setUserPreferences(response.data);
-                setSelectedBookmakers(response.data.preferences || []);
+                // Fetch user preferences (assuming you have an API endpoint for this)
+                const preferencesResponse = await axios.get('/api/user/bookmaker-preferences');
+                setSelectedBookmakers(preferencesResponse.data.preferences || []);
+
                 setLoading(false);
             } catch (error) {
                 setError(error.message);
+                setLoading(false);
             }
         };
 
-        fetchBookmakers();
-        fetchUserPreferences();
+        fetchData();
     }, []);
 
     const handleToggleBookmaker = (bookmakerId) => {
-        setSelectedBookmakers((prevState) =>
+        setSelectedBookmakers(prevState =>
             prevState.includes(bookmakerId)
-                ? prevState.filter((id) => id !== bookmakerId)
+                ? prevState.filter(id => id !== bookmakerId)
                 : [...prevState, bookmakerId]
         );
     };
