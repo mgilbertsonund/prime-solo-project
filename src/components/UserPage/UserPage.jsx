@@ -1,14 +1,15 @@
+// src/components/UserPage/UserPage.js
 import React from 'react';
-import {useSelector} from 'react-redux';
+import UserPreferences from '../UserPreferences/UserPreferences';
 
-function UserPage() {
-  const user = useSelector((store) => store.user);
+const UserPage = () => {
+  // other code...
   return (
-    <div className="container">
-      <h2>Welcome, {user.username}!</h2>
-      <p>Your ID is: {user.id}</p>
+    <div>
+      <h1>User Page</h1>
+      <UserPreferences />
     </div>
   );
-}
+};
 
 export default UserPage;

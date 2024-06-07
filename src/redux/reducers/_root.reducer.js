@@ -4,6 +4,8 @@ import user from './user.reducer';
 import standings from './standings.reducer';
 import schedule from './schedule.reducer';
 import odds from './odds.reducer';
+import bookmakers from './bookmakers.reducer';
+import UserPreferences from '../../components/UserPreferences/UserPreferences';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -17,6 +19,8 @@ const rootReducer = combineReducers({
   standings, // contains standings data
   schedule, // contain schedule data
   odds,
+  bookmakers,
+  UserPreferences,
 });
 
 export default rootReducer;

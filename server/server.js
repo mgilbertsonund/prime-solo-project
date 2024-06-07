@@ -10,6 +10,8 @@ const passport = require('./strategies/user.strategy');
 // Route Includes
 const userRouter = require('./routes/user.router');
 const oddsRouter = require('./routes/odds.router');
+const bookmakersRouter = require('./routes/bookmakers.router');
+const userBookmakerPreferencesRouter = require('./routes/userBookmakerPreferences.router');
 
 // Express Middleware
 app.use(express.json());
@@ -25,6 +27,8 @@ app.use(passport.session());
 
 // Routes
 app.use('/api/user', userRouter, oddsRouter);
+app.use('/api/bookmakers', bookmakersRouter);
+app.use('/api/user_bookmaker_preferences', userBookmakerPreferencesRouter);
 
 // Listen Server & Port
 app.listen(PORT, () => {
