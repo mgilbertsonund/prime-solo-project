@@ -1,5 +1,4 @@
-// export const saveBet = (betData) => ({
-//     type: 'SAVE_BET',
-//     payload: betData,
-// });
-
+export const saveBetRequest = (betData) => ({
+    type: 'SAVE_BET',
+    payload: betData,
+});

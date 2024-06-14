@@ -5,6 +5,7 @@ import userSaga from './user.saga';
 import standingsSaga from './standings.saga';
 import scheduleSaga from './schedule.saga';
 import oddsSaga from './odds.saga';
+import saveBet from './saveBet.saga';
 
 // rootSaga is the primary saga.
 // It bundles up all of the other sagas so our project can use them.
@@ -21,5 +22,6 @@ export default function* rootSaga() {
     standingsSaga(),
     scheduleSaga(),
     oddsSaga(),
+    saveBet(),
   ]);
 }

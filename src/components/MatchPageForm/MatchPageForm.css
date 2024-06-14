@@ -76,6 +76,24 @@
 }
 
 .bet-form-buttons button:last-child {
-  background-color: #30475E; /* Save button background color */
-  color: #DDDDDD; /* Save button text color */
+  background-color: #30475E; 
+  color: #DDDDDD; 
+}
+
+/* Arbitrage Checkbox Styles */
+.arbitrage-checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.arbitrage-checkbox-label {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #DDDDDD;
+}
+
+.arbitrage-checkbox {
+  transform: scale(1.2); /* Make the checkbox larger */
+  margin-right: 10px;
 }

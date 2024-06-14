@@ -5,7 +5,7 @@ import { fetchOddsRequest } from '../../redux/actions/odds.actions';
 import { arbitrageCalculator, processOddsData } from '../../utils/matchPageCalculations';
 import ArbitrageCalculator from '../ArbitrageCalculator/ArbitrageCalculator';
 import MatchPageForm from '../MatchPageForm/MatchPageForm';
-import './MatchPage.css'; // Import the CSS file
+import './MatchPage.css'; 
 
 const MatchPage = () => {
   const { matchId } = useParams();
@@ -98,6 +98,7 @@ const MatchPage = () => {
       />
       {selectedMarket && (
         <MatchPageForm
+          userId={user.id} // Pass the user ID to the form
           selectedMarket={selectedMarket}
           onCancel={() => setSelectedMarket(null)}
         />
