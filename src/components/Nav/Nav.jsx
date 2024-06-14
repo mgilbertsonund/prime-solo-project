@@ -1,31 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
-// import './Nav.css';
 import { useSelector } from 'react-redux';
+import logo from '../../assets/logo.png'; 
+import name from '../../assets/name.png';
+import './Nav.css';
 
 function Nav() {
   const user = useSelector((store) => store.user);
 
   return (
     <div className="nav">
-      <Link to="/home">
-        <h2 className="nav-title">Prime Solo Project</h2>
+      <Link to="/home" className="nav-logo-container">
+        <img src={logo} className="nav-logo" alt="Logo"/>
+        <img src={name} alt="FullStack Bets" className="nav-logo"/>
       </Link>
       <div>
-        {/* If no user is logged in, show these links */}
         {!user.id && (
-          // If there's no user, show login/registration links
           <Link className="navLink" to="/login">
-            Login / Register
+            <button>Login / Register</button>
           </Link>
         )}
-        {/* If a user is logged in, show these links */}
-        {/* ADD IN AN ICON FOR USER */}
         {user.id && (
           <>
             <Link className="navLink" to="/user">
-              User
+              <button>User Page</button>
             </Link>
             <LogOutButton className="navLink" />
           </>
