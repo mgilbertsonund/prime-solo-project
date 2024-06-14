@@ -18,7 +18,7 @@ function LoginForm() {
         payload: {
           username: username,
           password: password,
-          onSuccess: () => history.push('/home'),  // Navigate to LandingPage on success
+          onSuccess: () => history.push('/home'),
         },
       });
     } else {
@@ -28,7 +28,7 @@ function LoginForm() {
 
   return (
     <form className="formPanel" onSubmit={login}>
-      <h2>Log in to XXX</h2>
+      <h2>Log in to FullStack Bets</h2>
       {errors.loginMessage && (
         <h3 className="alert" role="alert">
           {errors.loginMessage}

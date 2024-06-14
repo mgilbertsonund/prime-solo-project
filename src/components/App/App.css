@@ -30,7 +30,7 @@ img {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 98%;
   height: 60px;
   background-color: #222831; 
   display: flex;
@@ -39,24 +39,6 @@ img {
   padding: 0 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000; 
-}
-
-.nav-title {
-  color: #F05454;
-  font-size: 1.5rem;
-  text-decoration: none;
-}
-
-.navLink {
-  color: white;
-  text-decoration: none;
-  margin-left: 20px;
-  cursor: pointer;
-  background-color: #F05454;
-}
-
-.navLink:hover {
-  color: #F05454; 
 }
 
 /* Side Navigation (SideNav) */
@@ -84,7 +66,7 @@ img {
 }
 
 .side-nav-title:hover {
-  color: #F05454; /* Hover color */
+  color: #F05454; 
 }
 
 /* Main Content Area */
