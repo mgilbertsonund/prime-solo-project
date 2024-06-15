@@ -8,7 +8,8 @@ const MatchPageForm = ({ userId, selectedMarket, onCancel }) => {
     const [isArbitrage, setIsArbitrage] = useState(false);
     const [bookmakers, setBookmakers] = useState([]);
     const dispatch = useDispatch();
-    console.log(selectedMarket);
+
+    console.log("Selected Market:", selectedMarket);
 
     // Fetch bookmakers data from API
     useEffect(() => {
@@ -17,6 +18,7 @@ const MatchPageForm = ({ userId, selectedMarket, onCancel }) => {
                 const response = await fetch('/api/bookmakers'); // Adjust endpoint as per your API
                 const data = await response.json();
                 setBookmakers(data); // Assuming data is an array of bookmakers
+                console.log("Fetched Bookmakers:", data); // Log fetched bookmakers for debugging
             } catch (error) {
                 console.error('Error fetching bookmakers:', error);
             }
@@ -26,24 +28,28 @@ const MatchPageForm = ({ userId, selectedMarket, onCancel }) => {
     }, []);
 
     const handleSave = () => {
-        // Find the selected bookmaker_id based on selectedMarket.bookmaker
-        const selectedBookmaker = bookmakers.find(bookmaker => bookmaker.name === selectedMarket.bookmaker);
-        
+        // Find the bookmaker object based on the exact match of selected bookmaker's name
+        const selectedBookmaker = bookmakers.find(bookmaker => 
+            bookmaker.bookmaker_name === selectedMarket.bookmaker
+        );
+
         if (!selectedBookmaker) {
-            console.error(`Bookmaker ${selectedMarket.bookmaker} not found in bookmakers list.`);
+            console.error(`Bookmaker "${selectedMarket.bookmaker}" not found in bookmakers list.`);
             return;
         }
 
         const betData = {
             user_id: userId,
             market: selectedMarket.market,
-            bookmaker_id: selectedBookmaker.id, // Use the fetched bookmaker_id
+            bookmaker_id: selectedBookmaker.bookmaker_id, // Use the fetched bookmaker_id
             odds: selectedMarket.oddsPrice,
             stake: parseFloat(stake),
             isArbitrage: isArbitrage,
             bet_date: new Date().toISOString(),
             successful_bet: false,
         };
+
+        console.log("Bet Data to be sent:", betData); // Debugging log
 
         dispatch(saveBetRequest(betData));
         onCancel();
