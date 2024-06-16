@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Calendar.css';
-import { calculateProfitOrLoss } from '../../utils/betCalculator'; 
+import { calculateProfitOrLoss } from '../../utils/betCalculator'; // Assuming you have a utility to calculate profit or loss
 
 const Calendar = ({ bets }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -9,14 +9,23 @@ const Calendar = ({ bets }) => {
         return <div>Loading...</div>; // Placeholder for loading state or handle empty case
     }
 
-    // Function to get bet information including calculated profit or loss
-    const getBetInfo = (date) => {
-        const bet = bets.find(bet => bet.bet_date.includes(date));
-        if (bet) {
-            const profitOrLoss = calculateProfitOrLoss(bet.stake, bet.odds, bet.successful_bet);
+    // Function to get cumulative profit or loss for all bets on a specific date
+    const getDailyProfitOrLoss = (date) => {
+        const dailyBets = bets.filter(bet => bet.bet_date.includes(date));
+        if (dailyBets.length > 0) {
+            let totalProfitOrLoss = 0;
+
+            dailyBets.forEach(bet => {
+                const profitOrLoss = calculateProfitOrLoss(bet.stake, bet.odds, bet.successful_bet);
+                totalProfitOrLoss += profitOrLoss;
+            });
+
+            // Determine profitability status based on total profit or loss
+            const profitable = totalProfitOrLoss > 0;
+
             return {
-                profitable: bet.successful_bet,
-                amount: profitOrLoss
+                profitable,
+                amount: totalProfitOrLoss
             };
         }
         return undefined; // Return undefined for days with no betting
@@ -37,12 +46,12 @@ const Calendar = ({ bets }) => {
         for (let day = 1; day <= daysCount; day++) {
             const currentDate = new Date(year, month, day);
             const dateString = currentDate.toISOString().split('T')[0];
-            const betInfo = getBetInfo(dateString);
+            const dailyInfo = getDailyProfitOrLoss(dateString);
 
             monthData.push({
                 date: dateString,
                 day: day,
-                ...betInfo // Include profitability and amount if they exist
+                ...dailyInfo // Include profitability and amount if they exist
             });
         }
 
@@ -63,7 +72,7 @@ const Calendar = ({ bets }) => {
                         <div className="day-number">{dayData.day}</div>
                         {dayData.amount !== undefined && (
                             <div className="bet-amount">
-                                {dayData.profitable ? '+' : '-'}${Math.abs(dayData.amount.toFixed(2))}
+                                {dayData.amount >= 0 ? '+' : '-'}${Math.abs(dayData.amount).toFixed(2)}
                             </div>
                         )}
                     </div>
