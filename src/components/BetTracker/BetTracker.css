@@ -1,76 +1,91 @@
 /* BetTracker.css */
 
-/* Overall container style */
+/* Main container */
 .bet-tracker {
-    margin: 20px;
     padding: 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #222831; /* Main background color */
+    color: #dddddd; /* Text color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    max-width: 1200px; /* Limit width */
+    margin: 0 auto; /* Center container */
 }
 
-/* Title style */
-.bet-tracker h1 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
+/* Heading styles */
+.bet-tracker h2 {
+    text-align: center;
+    color: #f05454; /* Highlighted heading color */
     margin-bottom: 20px;
+    font-size: 2rem; /* Large heading */
+    border-bottom: 2px solid #30475e; /* Separator */
+    padding-bottom: 10px;
 }
 
 /* Section titles style */
-.bet-tracker h2 {
-    font-size: 20px;
-    font-weight: bold;
-    color: #555;
+.bet-tracker h3 {
+    color: #222831; /* Sub-heading color */
+    background-color: #dddddd; /* Sub-heading background */
+    padding: 10px;
+    border-radius: 5px;
     margin-bottom: 10px;
 }
 
-/* Calendar section style */
-.calendar-section {
-    margin-bottom: 20px;
-}
-
-/* Chart section style */
-.chart-section {
-    margin-bottom: 20px;
-}
-
-/* Table section style */
-.table-section {
-    overflow-x: auto; /* Enable horizontal scrolling if needed */
-}
-
-/* Table style */
+/* Table styles */
 .bets-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-bottom: 20px; /* Space below table */
 }
 
-.bets-table th, .bets-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
+/* Table header */
 .bets-table th {
-    background-color: #f2f2f2;
-    color: #333;
+    background-color: #30475e; /* Header background */
+    color: #dddddd; /* Header text color */
+    padding: 10px;
     font-weight: bold;
+    text-align: left;
+    border-bottom: 2px solid #222831; /* Header bottom border */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
-.bets-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+/* Table rows */
+.bets-table tbody tr {
+    background-color: #222831; /* Row background color */
+    border-bottom: 1px solid #30475e; /* Row border */
 }
 
-.bets-table tr:hover {
-    background-color: #e9e9e9;
+.bets-table tbody tr:nth-child(even) {
+    background-color: #30475e; /* Alternate row color */
 }
 
-/* Responsive table style */
-@media (max-width: 600px) {
-    .bets-table {
-        font-size: 12px;
+.bets-table td {
+    padding: 10px;
+    border-bottom: 1px solid #222831; /* Row bottom border */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.bets-table td:first-child {
+    font-weight: bold; /* Highlight the first column */
+}
+
+.bets-table td:last-child {
+    text-align: right; /* Align last column to the right */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .bet-tracker {
+        padding: 10px; /* Reduce padding on small screens */
+    }
+
+    .bets-table th,
+    .bets-table td {
+        padding: 8px; /* Reduce cell padding on small screens */
+        font-size: 0.8rem; /* Smaller font for table cells */
+    }
+
+    .bets-table th {
+        font-size: 0.9rem; /* Smaller font for table headers */
     }
 }
+

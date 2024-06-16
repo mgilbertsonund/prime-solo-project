@@ -33,7 +33,7 @@ const ensureAuthenticated = (req, res, next) => {
     res.status(401).json({ error: 'User not authenticated' });
 };
 
-router.get('/user/bets', ensureAuthenticated, async (req, res) => {
+router.get('/user', ensureAuthenticated, async (req, res) => {
     const userId = req.user.id; // Assuming Passport stores user info here
 
     try {
