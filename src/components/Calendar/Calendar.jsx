@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Calendar.css';
-import { calculateProfitOrLoss } from '../../utils/betCalculator'; // Assuming you have a utility to calculate profit or loss
+import { calculateProfitOrLoss } from '../../utils/betCalculator';
 
 const Calendar = ({ bets }) => {
     const [currentDate, setCurrentDate] = useState(new Date());

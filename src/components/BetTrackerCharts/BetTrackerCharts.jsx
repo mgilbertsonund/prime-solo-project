@@ -1,53 +1,64 @@
 // BetTrackerCharts.jsx
 
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { CartesianGrid, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { calculateProfitOrLoss } from '../../utils/betCalculator'; 
+import './BetTrackerCharts.css';
 
 const BetTrackerCharts = ({ bets }) => {
+    // Function to aggregate bets by day and calculate cumulative profit/loss
+    const calculateCumulativeProfitLoss = () => {
+        const dailyData = {};
+        let cumulativeProfit = 0;
 
-    const calculateTotalProfit = () => {
-        return bets.reduce((total, bet) => {
-            if (bet.successful_bet) {
-                return total + (parseFloat(bet.stake) * bet.odds - parseFloat(bet.stake));
-            } else {
-                return total - parseFloat(bet.stake);
+        bets.forEach(bet => {
+            const betDate = new Date(bet.bet_date).toISOString().split('T')[0]; // Extract date in 'YYYY-MM-DD' format
+            const profit = calculateProfitOrLoss(parseFloat(bet.stake), parseFloat(bet.odds), bet.successful_bet);
+
+            if (!dailyData[betDate]) {
+                dailyData[betDate] = { date: betDate, dailyProfit: 0 };
             }
-        }, 0);
-    };
+            dailyData[betDate].dailyProfit += profit;
+        });
 
-    const calculateProfitOverTime = () => {
-        const monthlyData = [];
-        const currentDate = new Date();
-        let totalProfit = 0;
-
-        for (let month = 0; month < 6; month++) {
-            totalProfit += Math.random() * 1000 - 500; // Dummy data for demonstration
-            monthlyData.push({
-                month: currentDate.toLocaleString('default', { month: 'long', year: 'numeric' }),
-                profit: totalProfit.toFixed(2)
+        // Convert object to array, sort by date, and calculate cumulative profit
+        return Object.values(dailyData)
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
+            .map(dayData => {
+                cumulativeProfit += dayData.dailyProfit;
+                return {
+                    ...dayData,
+                    cumulativeProfit: cumulativeProfit
+                };
             });
-            currentDate.setMonth(currentDate.getMonth() - 1);
-        }
-
-        return monthlyData.reverse();
     };
 
-    const monthlyProfitData = calculateProfitOverTime();
+    const cumulativeProfitLossData = calculateCumulativeProfitLoss();
 
     return (
         <div className="charts-container">
-            {/* <h3>Total Profit: ${calculateTotalProfit().toFixed(2)}</h3> */}
             <div className="profit-over-time-chart">
-                <h3>Profit Over Time</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={monthlyProfitData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month" />
-                        <YAxis />
-                        <Tooltip />
+                <h3>Profit/Loss Over Time</h3>
+                <ResponsiveContainer width="100%" height={400}>
+                    <LineChart data={cumulativeProfitLossData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid horizontal={true} vertical={false} stroke="#30475E" opacity={.3}/>
+                        <XAxis dataKey="date" stroke="#dddddd" />
+                        <YAxis 
+                            tickFormatter={(value) => `$${value}`} 
+                            domain={['auto', 'auto']} 
+                            tickCount={6} 
+                            stroke="#dddddd"
+                        />
+                        <Tooltip formatter={(value) => `$${Number(value).toFixed(2)}`}/>
                         <Legend />
-                        <Line type="monotone" dataKey="profit" stroke="#8884d8" activeDot={{ r: 8 }} />
+                        <Line
+                            type="monotone"
+                            dataKey="cumulativeProfit"
+                            stroke="#30475E"
+                            strokeWidth={4}
+                            dot={false}
+                            activeDot={{ r: 8 }}
+                        />
                     </LineChart>
                 </ResponsiveContainer>
             </div>
