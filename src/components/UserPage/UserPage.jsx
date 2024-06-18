@@ -3,7 +3,7 @@ import React from 'react';
 import UserPreferences from '../UserPreferences/UserPreferences';
 
 const UserPage = () => {
-  // other code...
+  
   return (
     <div>
       <h1>User Page</h1>

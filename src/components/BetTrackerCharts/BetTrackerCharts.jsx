@@ -38,7 +38,7 @@ const BetTrackerCharts = ({ bets }) => {
     return (
         <div className="charts-container">
             <div className="profit-over-time-chart">
-                <h3>Profit/Loss Over Time</h3>
+                <h3>Profit Over Time</h3>
                 <ResponsiveContainer width="100%" height={400}>
                     <LineChart data={cumulativeProfitLossData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid horizontal={true} vertical={false} stroke="#30475E" opacity={.3}/>

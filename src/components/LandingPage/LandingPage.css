@@ -1,34 +1,106 @@
+/* LandingPage.css */
+
 .container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
 h2 {
+  text-align: center;
+  color: #f05454;
   margin-bottom: 20px;
+  font-size: 2rem;
+  border-bottom: 2px solid #30475e;
+  padding-bottom: 10px;
 }
 
 .games-list {
-  list-style-type: none;
-  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .game-item {
-  margin-bottom: 20px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f9f9f9;
+  display: grid;
+  grid-template-columns: 1fr 1fr; 
+  grid-template-rows: repeat(3, auto);
+  background-color: #222831;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  width: calc(100% - 20px); 
+}
+
+.game-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+}
+
+.odds-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  text-align: right;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #dddddd;
+}
+
+.commence-time {
+  font-size: 0.85rem; 
+  color: #f05454; 
+  margin-bottom: 10px;
+}
+
+.odds-info p {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #dddddd;
+}
+
+.odds-info.blurred {
+  filter: blur(5px);
 }
 
 .view-odds-link {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
+  grid-column: 1 / span 2; /* Span both columns for the button */
+  background-color: #30475E;
+  color: #fff;
+  border: none;
+  padding: 8px 12px; /* Reduced padding */
+  cursor: pointer;
   border-radius: 4px;
+  align-self: center;
+  margin-top: 10px;
 }
 
 .view-odds-link:hover {
-  background-color: #0056b3;
+  background-color: #f05454;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+  .game-item {
+    width: 90%; /* Stack items vertically on small screens */
+    grid-template-columns: 1fr; /* Stack columns vertically on small screens */
+    grid-template-rows: auto;
+  }
+
+  .odds-info {
+    text-align: left;
+  }
+
+  .view-odds-link {
+    width: 100%;
+  }
 }

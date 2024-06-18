@@ -28,7 +28,7 @@ const BetTrackerTable = ({ bets, onDelete }) => {
 
     return (
         <div className="table-container">
-            <h3>Bet History</h3>
+            <h3 className='header'>Bet History</h3>
             <table className="bets-table">
                 <thead>
                     <tr>

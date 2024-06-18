@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './UserPreferences.css'; // Import your CSS for styling
+import './UserPreferences.css'; 
 
 const UserPreferences = () => {
     const [bookmakers, setBookmakers] = useState([]);
@@ -53,7 +53,7 @@ const UserPreferences = () => {
             await axios.post('/api/user/bookmaker-preferences', {
                 preferences: activeIds,
             });
-            setIsEditing(false); // Exit edit mode after saving
+            setIsEditing(false);
         } catch (error) {
             setError(error.message);
         }
@@ -65,6 +65,15 @@ const UserPreferences = () => {
     return (
         <div className="user-preferences">
             <h2>Manage Your Bookmaker Preferences</h2>
+            <div className="preferences-actions">
+                <button onClick={() => setIsEditing(!isEditing)}>
+                    {isEditing ? 'Cancel' : 'Edit Bookmakers'}
+                </button>
+                {isEditing && (
+                    <button onClick={handleSavePreferences}>Save Preferences</button>
+                )}
+            </div>
+            
             <div className="preferences-container">
                 <div className="bookmakers-section">
                     <h3>Active Bookmakers</h3>
@@ -93,16 +102,7 @@ const UserPreferences = () => {
                         </ul>
                     </div>
                 )}
-            </div>
-
-            <div className="preferences-actions">
-                <button onClick={() => setIsEditing(!isEditing)}>
-                    {isEditing ? 'Cancel' : 'Edit Bookmakers'}
-                </button>
-                {isEditing && (
-                    <button onClick={handleSavePreferences}>Save Preferences</button>
-                )}
-            </div>
+            </div>        
         </div>
     );
 };

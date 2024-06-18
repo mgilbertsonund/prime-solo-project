@@ -4,6 +4,7 @@
     margin: 0 auto;
     padding: 20px;
     font-family: Arial, sans-serif;
+    text-align: center;
 }
 
 .bets-table {
@@ -19,7 +20,7 @@
 
 .bets-table th {
     background-color: #dddddd;
-    color: #333;
+    color: #222831;
 }
 
 .bets-table tbody tr:nth-child(even) {
@@ -36,7 +37,7 @@
     border: none;
     padding: 5px 10px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 4px;   
 }
 
 .delete-button:hover {
