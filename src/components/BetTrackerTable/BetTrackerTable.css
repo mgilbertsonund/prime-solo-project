@@ -1,0 +1,72 @@
+/* BetTrackerTable.css */
+
+.table-container {
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.bets-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.bets-table th, .bets-table td {
+    padding: 8px;
+    text-align: center;
+}
+
+.bets-table th {
+    background-color: #dddddd;
+    color: #333;
+}
+
+.bets-table tbody tr:nth-child(even) {
+    background-color: #30475E;
+}
+
+.bets-table tbody tr:nth-child(odd) {
+    background-color: #222831;
+}
+
+.delete-button {
+    background-color: #f05454;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+/* Pagination controls */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination-button {
+    background-color: #30475E;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 0 10px;
+}
+
+.pagination-button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    font-size: 1rem;
+    color: #222831;
+}
