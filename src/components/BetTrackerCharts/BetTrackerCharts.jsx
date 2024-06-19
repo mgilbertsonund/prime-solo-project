@@ -1,8 +1,6 @@
-// BetTrackerCharts.jsx
-
 import React from 'react';
 import { CartesianGrid, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { calculateProfitOrLoss } from '../../utils/betCalculator'; 
+import { calculateProfitOrLoss } from '../../utils/betCalculator';
 import './BetTrackerCharts.css';
 
 const BetTrackerCharts = ({ bets }) => {
@@ -12,7 +10,7 @@ const BetTrackerCharts = ({ bets }) => {
         let cumulativeProfit = 0;
 
         bets.forEach(bet => {
-            const betDate = new Date(bet.bet_date).toISOString().split('T')[0]; // Extract date in 'YYYY-MM-DD' format
+            const betDate = new Date(bet.bet_date).toISOString().split('T')[0]; 
             const profit = calculateProfitOrLoss(parseFloat(bet.stake), parseFloat(bet.odds), bet.successful_bet);
 
             if (!dailyData[betDate]) {
@@ -41,18 +39,20 @@ const BetTrackerCharts = ({ bets }) => {
                 <h3>Profit Over Time</h3>
                 <ResponsiveContainer width="100%" height={400}>
                     <LineChart data={cumulativeProfitLossData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                        <CartesianGrid horizontal={true} vertical={false} stroke="#30475E" opacity={.3}/>
-                        <XAxis 
-                            dataKey="date" 
-                            stroke="#dddddd" />
+                        <CartesianGrid horizontal={true} vertical={false} stroke="#30475E" opacity={0.3} />
+                        <XAxis dataKey="date" stroke="#dddddd" tickCount={8} />
                         <YAxis 
                             tickFormatter={(value) => `$${value}`} 
                             domain={['auto', 'auto']} 
                             tickCount={6} 
-                            stroke="#dddddd"
+                            stroke="#dddddd" 
                         />
-                        <Tooltip formatter={(value) => `$${Number(value).toFixed(2)}`}/>
-                        <Legend />
+                        <Tooltip 
+                            formatter={(value) => `$${Number(value).toFixed(2)}`}
+                            labelFormatter={(label) => `Date: ${label}`} 
+                            contentStyle={{ color: '#30475E' }} 
+                        />
+                        <Legend formatter={() => 'Profit'} /> 
                         <Line
                             type="monotone"
                             dataKey="cumulativeProfit"
@@ -60,6 +60,7 @@ const BetTrackerCharts = ({ bets }) => {
                             strokeWidth={4}
                             dot={false}
                             activeDot={{ r: 8 }}
+                            name="Profit" 
                         />
                     </LineChart>
                 </ResponsiveContainer>
