@@ -1,50 +1,68 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
+import { fetchUserPreferences } from '../../redux/actions/userPreferences.actions';
 import { arbitrageCalculator, processOddsData } from '../../utils/matchPageCalculations';
 import ArbitrageCalculator from '../ArbitrageCalculator/ArbitrageCalculator';
 import MatchPageForm from '../MatchPageForm/MatchPageForm';
-import './MatchPage.css'; 
+import './MatchPage.css';
 
 const MatchPage = () => {
   const { matchId } = useParams();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { odds, loading, error } = useSelector(store => store.odds);
+  const { odds, loading: oddsLoading, error: oddsError } = useSelector(store => store.odds);
+  const { preferences, loading: prefsLoading, error: prefsError } = useSelector(store => store.userPreferences);
   const user = useSelector(store => store.user);
 
   const [selectedMarket, setSelectedMarket] = useState(null);
+  const [filteredGame, setFilteredGame] = useState(null);
 
   useEffect(() => {
     if (!user.id) {
       history.push('/login');
-    } else if (!odds || odds.length === 0) {
-      dispatch(fetchOddsRequest());
+    } else {
+      // Fetch user preferences and odds
+      dispatch(fetchUserPreferences());
+      if (!odds || odds.length === 0) {
+        dispatch(fetchOddsRequest());
+      }
     }
   }, [dispatch, odds, user, history]);
 
-  const selectedGame = useMemo(() => odds.find(game => game.id === matchId), [odds, matchId]);
+  useEffect(() => {
+    if (odds && preferences.length > 0) {
+      const selectedGame = odds.find(game => game.id === matchId);
+      if (selectedGame) {
+        const filteredBookmakers = selectedGame.bookmakers.filter(bookmaker =>
+          preferences.some(pref => pref.bookmaker_name === bookmaker.title)
+        );
+        setFilteredGame({ ...selectedGame, bookmakers: filteredBookmakers });
+      }
+    }
+  }, [odds, preferences, matchId]);
 
   const processedOdds = useMemo(() => {
-    if (!selectedGame) return {};
-    return processOddsData(selectedGame);
-  }, [selectedGame]);
+    if (!filteredGame) return {};
+    return processOddsData(filteredGame);
+  }, [filteredGame]);
 
   const handleCellClick = (market, bookmaker, oddsPrice) => {
     setSelectedMarket({ market, bookmaker, oddsPrice, stake: 100 });
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!selectedGame) return <p>No game found.</p>;
+  if (oddsLoading || prefsLoading) return <p>Loading...</p>;
+  if (oddsError) return <p>Error loading odds: {oddsError}</p>;
+  if (prefsError) return <p>Error loading preferences: {prefsError}</p>;
+  if (!filteredGame) return <p>No game found or no bookmakers matched your preferences.</p>;
 
   const { bookmakersData, bestAwayOdds, bestHomeOdds, bestAwayBookmaker, bestHomeBookmaker } = processedOdds;
   const arbitrageCalculatorVariables = processedOdds ? arbitrageCalculator({ bestAwayOdds, bestHomeOdds }) : null;
 
   return (
     <div className="match-container">
-      <h2>{selectedGame.away_team} vs. {selectedGame.home_team}</h2>
+      <h2>{filteredGame.away_team} vs. {filteredGame.home_team}</h2>
       <h3>Bookmaker Odds</h3>
       <div className="scroll-container">
         <table className="scroll-table">
@@ -52,33 +70,33 @@ const MatchPage = () => {
             <tr>
               <th></th>
               <th>Best Odds</th>
-              {bookmakersData.map(bookmaker => (
+              {bookmakersData && bookmakersData.map(bookmaker => (
                 <th key={bookmaker.key}>{bookmaker.title}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th>{selectedGame.away_team}</th>
+              <th>{filteredGame.away_team}</th>
               <td>{bestAwayOdds} ({bestAwayBookmaker})</td>
-              {bookmakersData.map(bookmaker => (
+              {bookmakersData && bookmakersData.map(bookmaker => (
                 <td
                   key={`${bookmaker.key}-away`}
                   className={bookmaker.isBetterAway ? 'better-odds' : ''}
-                  onClick={() => handleCellClick(`${selectedGame.away_team} Moneyline`, bookmaker.title, bookmaker.awayPrice)}
+                  onClick={() => handleCellClick(`${filteredGame.away_team} Moneyline`, bookmaker.title, bookmaker.awayPrice)}
                 >
                   {bookmaker.awayPrice || 'N/A'}
                 </td>
               ))}
             </tr>
             <tr>
-              <th>{selectedGame.home_team}</th>
+              <th>{filteredGame.home_team}</th>
               <td>{bestHomeOdds} ({bestHomeBookmaker})</td>
-              {bookmakersData.map(bookmaker => (
+              {bookmakersData && bookmakersData.map(bookmaker => (
                 <td
                   key={`${bookmaker.key}-home`}
                   className={bookmaker.isBetterHome ? 'better-odds' : ''}
-                  onClick={() => handleCellClick(`${selectedGame.home_team} Moneyline`, bookmaker.title, bookmaker.homePrice)}
+                  onClick={() => handleCellClick(`${filteredGame.home_team} Moneyline`, bookmaker.title, bookmaker.homePrice)}
                 >
                   {bookmaker.homePrice || 'N/A'}
                 </td>
@@ -88,8 +106,8 @@ const MatchPage = () => {
         </table>
       </div>
       <ArbitrageCalculator
-        awayTeam={selectedGame.away_team}
-        homeTeam={selectedGame.home_team}
+        awayTeam={filteredGame.away_team}
+        homeTeam={filteredGame.home_team}
         bestAwayOdds={bestAwayOdds}
         bestHomeOdds={bestHomeOdds}
         bestAwayBookmaker={bestAwayBookmaker}

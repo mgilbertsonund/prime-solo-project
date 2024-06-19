@@ -9,38 +9,60 @@ export const UPDATE_USER_PREFERENCES_SUCCESS = 'UPDATE_USER_PREFERENCES_SUCCESS'
 export const UPDATE_USER_PREFERENCES_FAILURE = 'UPDATE_USER_PREFERENCES_FAILURE';
 
 // Action Creators
-export const fetchUserPreferencesRequest = () => ({ type: FETCH_USER_PREFERENCES_REQUEST });
-export const fetchUserPreferencesSuccess = (preferences) => ({ type: FETCH_USER_PREFERENCES_SUCCESS, payload: preferences });
-export const fetchUserPreferencesFailure = (error) => ({ type: FETCH_USER_PREFERENCES_FAILURE, payload: error });
+export const fetchUserPreferencesRequest = () => ({
+  type: FETCH_USER_PREFERENCES_REQUEST,
+});
 
-export const updateUserPreferencesRequest = () => ({ type: UPDATE_USER_PREFERENCES_REQUEST });
-export const updateUserPreferencesSuccess = () => ({ type: UPDATE_USER_PREFERENCES_SUCCESS });
-export const updateUserPreferencesFailure = (error) => ({ type: UPDATE_USER_PREFERENCES_FAILURE, payload: error });
+export const fetchUserPreferencesSuccess = (preferences) => ({
+  type: FETCH_USER_PREFERENCES_SUCCESS,
+  payload: preferences,
+});
 
-// Thunks to fetch and update user preferences
-export const fetchUserPreferences = (userId) => {
-    return dispatch => {
-        dispatch(fetchUserPreferencesRequest());
-        axios.get(`/api/userPreferences/${userId}`)
-            .then(response => {
-                dispatch(fetchUserPreferencesSuccess(response.data));
-            })
-            .catch(error => {
-                dispatch(fetchUserPreferencesFailure(error.message));
-            });
-    };
+export const fetchUserPreferencesFailure = (error) => ({
+  type: FETCH_USER_PREFERENCES_FAILURE,
+  payload: error,
+});
+
+export const updateUserPreferencesRequest = () => ({
+  type: UPDATE_USER_PREFERENCES_REQUEST,
+});
+
+export const updateUserPreferencesSuccess = () => ({
+  type: UPDATE_USER_PREFERENCES_SUCCESS,
+});
+
+export const updateUserPreferencesFailure = (error) => ({
+  type: UPDATE_USER_PREFERENCES_FAILURE,
+  payload: error,
+});
+
+// Thunks
+export const fetchUserPreferences = () => {
+  return (dispatch) => {
+    dispatch(fetchUserPreferencesRequest());
+    axios
+      .get('/api/user/bookmaker-preferences')
+      .then((response) => {
+        dispatch(fetchUserPreferencesSuccess(response.data));
+      })
+      .catch((error) => {
+        dispatch(fetchUserPreferencesFailure(error.message));
+      });
+  };
 };
 
-export const updateUserPreferences = (userId, preferences) => {
-    return dispatch => {
-        dispatch(updateUserPreferencesRequest());
-        axios.post(`/api/userPreferences/${userId}`, { preferences })
-            .then(() => {
-                dispatch(updateUserPreferencesSuccess());
-                dispatch(fetchUserPreferences(userId)); // Refresh preferences after update
-            })
-            .catch(error => {
-                dispatch(updateUserPreferencesFailure(error.message));
-            });
-    };
+export const updateUserPreferences = (preferences) => {
+  return (dispatch, getState) => {
+    dispatch(updateUserPreferencesRequest());
+    const userId = getState().user.id; // Get user ID from the Redux state
+    axios
+      .post(`/api/user/bookmaker-preferences`, { preferences })
+      .then(() => {
+        dispatch(updateUserPreferencesSuccess());
+        dispatch(fetchUserPreferences()); // Refresh preferences after update
+      })
+      .catch((error) => {
+        dispatch(updateUserPreferencesFailure(error.message));
+      });
+  };
 };

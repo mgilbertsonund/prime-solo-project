@@ -23,53 +23,58 @@ router.get('/', (req, res) => {
         });
 });
 
-
 // POST user preferences
-router.post('/', (req, res) => {
-    const userId = req.user.id; 
+router.post('/', async (req, res) => {
+    const userId = req.user.id;
     const { preferences } = req.body;
 
-    // Fetch the user's current preferences from the database
-    const fetchCurrentPreferencesQuery = `SELECT bookmaker_id FROM user_bookmaker_preferences WHERE user_id = $1;`;
-    pool.query(fetchCurrentPreferencesQuery, [userId])
-        .then((currentPreferencesResult) => {
-            const currentPreferences = currentPreferencesResult.rows.map(row => row.bookmaker_id);
+    const client = await pool.connect(); // Get a connection from the pool
 
-            // Identify new preferences to add and deselected ones to remove
-            const preferencesToAdd = preferences.filter(bookmakerId => !currentPreferences.includes(bookmakerId));
-            const preferencesToRemove = currentPreferences.filter(bookmakerId => !preferences.includes(bookmakerId));
+    try {
+        // Fetch the user's current preferences from the database
+        const fetchCurrentPreferencesQuery = `
+            SELECT bookmaker_id FROM user_bookmaker_preferences WHERE user_id = $1;
+        `;
+        const currentPreferencesResult = await client.query(fetchCurrentPreferencesQuery, [userId]);
+        const currentPreferences = currentPreferencesResult.rows.map(row => row.bookmaker_id);
 
-            // Start a transaction
-            return pool.query('BEGIN')
-                .then(() => {
-                    // Insert new preferences
-                    const insertPromises = preferencesToAdd.map(bookmakerId => {
-                        const insertQuery = `INSERT INTO user_bookmaker_preferences (user_id, bookmaker_id) VALUES ($1, $2);`;
-                        return pool.query(insertQuery, [userId, bookmakerId]);
-                    });
+        // Identify new preferences to add and deselected ones to remove
+        const preferencesToAdd = preferences.filter(bookmakerId => !currentPreferences.includes(bookmakerId));
+        const preferencesToRemove = currentPreferences.filter(bookmakerId => !preferences.includes(bookmakerId));
 
-                    // Remove deselected preferences
-                    const removePromises = preferencesToRemove.map(bookmakerId => {
-                        const deleteQuery = `DELETE FROM user_bookmaker_preferences WHERE user_id = $1 AND bookmaker_id = $2;`;
-                        return pool.query(deleteQuery, [userId, bookmakerId]);
-                    });
+        // Start a transaction
+        await client.query('BEGIN');
 
-                    // Execute all insert and delete queries
-                    return Promise.all([...insertPromises, ...removePromises]);
-                })
-                .then(() => pool.query('COMMIT')) // Commit transaction
-                .then(() => res.sendStatus(200))
-                .catch(err => {
-                    console.error('Error updating user preferences:', err.message);
-                    pool.query('ROLLBACK'); // Rollback transaction in case of error
-                    res.sendStatus(500);
-                });
-        })
-        .catch(err => {
-            console.error('Error fetching current user preferences:', err.message);
-            res.sendStatus(500);
-        });
+        // Insert new preferences
+        for (const bookmakerId of preferencesToAdd) {
+            const insertQuery = `
+                INSERT INTO user_bookmaker_preferences (user_id, bookmaker_id) VALUES ($1, $2);
+            `;
+            await client.query(insertQuery, [userId, bookmakerId]);
+        }
+
+        // Remove deselected preferences
+        for (const bookmakerId of preferencesToRemove) {
+            const deleteQuery = `
+                DELETE FROM user_bookmaker_preferences WHERE user_id = $1 AND bookmaker_id = $2;
+            `;
+            await client.query(deleteQuery, [userId, bookmakerId]);
+        }
+
+        // Commit transaction
+        await client.query('COMMIT');
+        res.sendStatus(200);
+    } catch (err) {
+        console.error('Error updating user preferences:', err.message);
+        try {
+            await client.query('ROLLBACK'); // Rollback transaction in case of error
+        } catch (rollbackError) {
+            console.error('Error rolling back transaction:', rollbackError.message);
+        }
+        res.status(500).send({ message: 'Failed to update user preferences.' });
+    } finally {
+        client.release(); // Release the client back to the pool
+    }
 });
-
 
 module.exports = router;
