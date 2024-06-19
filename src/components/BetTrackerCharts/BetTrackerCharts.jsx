@@ -42,7 +42,9 @@ const BetTrackerCharts = ({ bets }) => {
                 <ResponsiveContainer width="100%" height={400}>
                     <LineChart data={cumulativeProfitLossData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid horizontal={true} vertical={false} stroke="#30475E" opacity={.3}/>
-                        <XAxis dataKey="date" stroke="#dddddd" />
+                        <XAxis 
+                            dataKey="date" 
+                            stroke="#dddddd" />
                         <YAxis 
                             tickFormatter={(value) => `$${value}`} 
                             domain={['auto', 'auto']} 

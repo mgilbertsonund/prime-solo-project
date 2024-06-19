@@ -58,6 +58,33 @@ const Calendar = ({ bets }) => {
         return monthData;
     };
 
+    // Function to calculate the total profit
+    const calculateTotalProfit = () => {
+        return bets.reduce((total, bet) => {
+            const profitOrLoss = calculateProfitOrLoss(bet.stake, bet.odds, bet.successful_bet);
+            return total + profitOrLoss;
+        }, 0);
+    };
+
+    // Function to calculate the profit for the current month
+    const calculateMonthlyProfit = () => {
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        return bets.reduce((total, bet) => {
+            const betDate = new Date(bet.bet_date);
+            if (betDate.getMonth() === currentMonth && betDate.getFullYear() === currentYear) {
+                const profitOrLoss = calculateProfitOrLoss(bet.stake, bet.odds, bet.successful_bet);
+                return total + profitOrLoss;
+            }
+            return total;
+        }, 0);
+    };
+
+    // Calculate the profits
+    const totalProfit = calculateTotalProfit().toFixed(2);
+    const monthlyProfit = calculateMonthlyProfit().toFixed(2);
+
     // Function to render the calendar grid
     const renderCalendar = () => {
         const monthData = getMonthData(currentDate);
@@ -92,15 +119,27 @@ const Calendar = ({ bets }) => {
     };
 
     return (
-        <div className="calendar-container">
-            <div className="calendar-header">
-                <button onClick={moveToPreviousMonth}>Previous</button>
-                <div className="calendar-month-year">
-                    {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+        <div className="calendar-content">
+            <div className="calendar-container">
+                <div className="calendar-header">
+                    <button onClick={moveToPreviousMonth}>Previous</button>
+                    <div className="calendar-month-year">
+                        {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                    </div>
+                    <button onClick={moveToNextMonth}>Next</button>
                 </div>
-                <button onClick={moveToNextMonth}>Next</button>
+                {renderCalendar()}
             </div>
-            {renderCalendar()}
+            <div className="profit-summary-container">
+                <div className="profit-summary-box">
+                    <h4>Total Profit</h4>
+                    <p>${totalProfit}</p>
+                </div>
+                <div className="profit-summary-box">
+                    <h4>Monthly Profit</h4>
+                    <p>${monthlyProfit}</p>
+                </div>
+            </div>
         </div>
     );
 };
