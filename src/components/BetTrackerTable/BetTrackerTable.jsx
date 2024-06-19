@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteBet } from '../../redux/actions/deletebet.actions'; // Adjust the path as needed
 import { calculateProfitOrLoss } from '../../utils/betCalculator'; 
 import './BetTrackerTable.css';
 
-const BetTrackerTable = ({ bets, onDelete }) => {
-    const [currentPage, setCurrentPage] = useState(0); // Track the current page
-    const itemsPerPage = 10; // Number of items to display per page
+const BetTrackerTable = ({ bets }) => {
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemsPerPage = 10;
+    const dispatch = useDispatch();
 
-    // Determine the bets to display for the current page
+    // Pagination logic
     const indexOfLastBet = (currentPage + 1) * itemsPerPage;
     const indexOfFirstBet = currentPage * itemsPerPage;
     const currentBets = bets.slice(indexOfFirstBet, indexOfLastBet);
-
     const totalPages = Math.ceil(bets.length / itemsPerPage);
 
-    // Handlers for pagination
+    // Pagination handlers
     const handleNextPage = () => {
         if (currentPage < totalPages - 1) {
             setCurrentPage(currentPage + 1);
@@ -24,6 +26,11 @@ const BetTrackerTable = ({ bets, onDelete }) => {
         if (currentPage > 0) {
             setCurrentPage(currentPage - 1);
         }
+    };
+
+    // Delete bet handler
+    const handleDelete = (betId) => {
+        dispatch(deleteBet(betId));
     };
 
     return (
@@ -57,7 +64,7 @@ const BetTrackerTable = ({ bets, onDelete }) => {
                                     ${profitLoss.toFixed(2)}
                                 </td>
                                 <td>
-                                    <button className="delete-button" onClick={() => onDelete(bet.id)}>Delete</button>
+                                    <button className="delete-button" onClick={() => handleDelete(bet.bet_id)}>Delete</button>
                                 </td>
                             </tr>
                         );

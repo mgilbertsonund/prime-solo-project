@@ -21,7 +21,7 @@ const BetTracker = () => {
                 <Calendar bets={bets} />
             </div>
             <div className="line-graph-section">
-                <BetTrackerCharts bets={bets} /> {/* Example: Pass bets data to LineGraph component */}
+                <BetTrackerCharts bets={bets} /> 
             </div>
             <div className="table-section">
                 <BetTrackerTable bets={bets} />

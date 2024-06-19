@@ -46,4 +46,24 @@ router.get('/user', ensureAuthenticated, async (req, res) => {
     }
 });
 
+router.delete('/user/:id', ensureAuthenticated, async (req, res) => {
+    const betId = req.params.id;
+    const userId = req.user.id; // User ID from authenticated session
+
+    try {
+        const query = `DELETE FROM users_bets WHERE bet_id = $1 AND user_id = $2 RETURNING *`;
+        const result = await pool.query(query, [betId, userId]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Bet not found or not authorized to delete' });
+        }
+
+        res.status(200).json({ message: 'Bet deleted successfully', bet: result.rows[0] });
+    } catch (error) {
+        console.error('Error deleting bet:', error);
+        res.status(500).json({ error: 'Failed to delete bet' });
+    }
+});
+
+
 module.exports = router;

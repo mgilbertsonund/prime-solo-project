@@ -8,7 +8,6 @@
  * @returns {number} The profit (positive) or loss (negative) amount.
  */
 export const calculateProfitOrLoss = (stake, odds, successful) => {
-    console.log('figs', stake, odds, successful)
     if (successful) {
         if (odds > 0) {
             return (odds / 100) * stake;
