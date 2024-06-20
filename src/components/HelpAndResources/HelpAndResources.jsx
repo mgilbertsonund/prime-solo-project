@@ -1,14 +1,16 @@
 import React from 'react';
 import './HelpAndResources.css';
 import arbitrageExample from '../../assets/arbitrageExample.png';
+import name from '../../assets/name.png';
+import logo from '../../assets/logo.png';
 
 const HelpAndResources = () => {
     return (
         <div className="help-container">
-            <h1>Help & Resources</h1>
-
+            <img src={logo} className="name-image"/>
+            <img src={name} className="logo-image"/>
             <section className="introduction">
-                <p>Welcome to our arbitrage betting website! Here, you'll find definitions of common betting terms and an explanation of the purpose and benefits of our platform.</p>
+                <p>Welcome to FullStack Bets Help & Resources page. Here, you'll find definitions of common betting terms and an explanation of the purpose and benefits of our platform.</p>
             </section>
 
             <section className="betting-definitions">
@@ -35,9 +37,9 @@ const HelpAndResources = () => {
             </section>
 
             <section className="website-purpose">
-                <h2>Purpose of Our Website</h2>
+                <h2>Purpose of FullStack Bets</h2>
                 <p>
-                    Our arbitrage betting website is designed to help you find and capitalize on arbitrage opportunities across different bookmakers. By comparing odds and calculating potential profits, we enable you to place bets in a way that guarantees returns, regardless of the outcome. Our tools and resources are aimed at providing you with the knowledge and insights needed to engage in this profitable betting strategy safely and effectively.
+                    FullStack Bets is designed to help you find and capitalize on arbitrage opportunities across different bookmakers. By comparing odds and calculating potential profits, we enable you to place bets in a way that guarantees returns, regardless of the outcome. Our tools and resources are aimed at providing you with the knowledge and insights needed to engage in this profitable betting strategy safely and effectively.
                 </p>
             </section>
 

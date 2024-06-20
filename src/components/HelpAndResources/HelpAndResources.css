@@ -7,6 +7,13 @@
     color: #dddddd;
 }
 
+.name-image,
+.logo-image {
+    display: block;
+    margin: 20px auto; /* Center the images horizontally and add some vertical margin */
+    max-width: 200px; /* Adjust the maximum width of the images */
+}
+
 .help-container h1 {
     text-align: center;
     margin-bottom: 20px;

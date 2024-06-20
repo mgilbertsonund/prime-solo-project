@@ -39,7 +39,7 @@ function Nav() {
               {dropdownOpen && (
                 <div className="dropdown-content">
                   <Link className="dropdownLink" to="/user">
-                    User Page
+                    Manage Bookmakers
                   </Link>
                   <LogOutButton className="dropdownLink" />
                 </div>

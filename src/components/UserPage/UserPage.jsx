@@ -6,7 +6,6 @@ const UserPage = () => {
   
   return (
     <div>
-      <h1>User Settings</h1>
       <UserPreferences />
     </div>
   );
