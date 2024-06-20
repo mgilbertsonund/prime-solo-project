@@ -19,69 +19,37 @@ h2 {
 .games-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  list-style: none;
+  padding: 0;
 }
 
 .game-item {
-  display: grid;
-  grid-template-columns: 1fr 1fr; 
-  grid-template-rows: repeat(3, auto);
+  display: flex;
+  flex-direction: column;
   background-color: #222831;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
-  width: calc(100% - 20px); 
+  position: relative;
 }
 
-.game-details {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  justify-content: center;
-}
-
-.odds-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  justify-content: center;
-  text-align: right;
-}
-
-h3 {
-  margin: 0;
-  font-size: 1.15rem;
-  color: #dddddd;
-}
-
-.commence-time {
-  font-size: 0.85rem; 
-  color: #f05454; 
-  margin-bottom: 10px;
-}
-
-.odds-info p {
-  margin: 0;
-  font-size: 1.15rem;
-  color: #dddddd;
-}
-
-.odds-info.blurred {
-  filter: blur(5px);
+.game-item:hover .view-odds-link {
+  display: block; /* Show button on hover */
 }
 
 .view-odds-link {
-  grid-column: 1 / span 2; /* Span both columns for the button */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%; 
   background-color: #30475E;
   color: #fff;
   border: none;
-  padding: 8px 12px; /* Reduced padding */
+  padding: 8px 12px;
+  border-radius: 0 0 8px 8px; /* Rounded bottom corners */
   cursor: pointer;
-  border-radius: 4px;
-  align-self: center;
-  margin-top: 10px;
 }
 
 .view-odds-link:hover {
@@ -90,17 +58,7 @@ h3 {
 
 /* Responsive layout for smaller screens */
 @media (max-width: 768px) {
-  .game-item {
-    width: 90%; /* Stack items vertically on small screens */
-    grid-template-columns: 1fr; /* Stack columns vertically on small screens */
-    grid-template-rows: auto;
-  }
-
-  .odds-info {
-    text-align: left;
-  }
-
-  .view-odds-link {
-    width: 100%;
+  .games-list {
+    grid-template-columns: 1fr; /* Stack items vertically on small screens */
   }
 }

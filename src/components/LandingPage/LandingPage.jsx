@@ -1,9 +1,11 @@
+// LandingPage.jsx
+
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOddsRequest } from '../../redux/actions/odds.actions';
-import { calculateAverageAmericanOdds } from '../../utils/oddsCalculations';
 import './LandingPage.css'; 
+import GameDetails from '../GameDetails/GameDetails'; 
 
 const LandingPage = () => {
   const dispatch = useDispatch();
@@ -32,18 +34,13 @@ const LandingPage = () => {
       <ul className="games-list">
         {odds.map((game) => (
           <li key={game.id} className="game-item">
-            <div className="game-details">
-              <p className="commence-time">{new Date(game.commence_time).toLocaleString()}</p>
-              <h3>{game.away_team}</h3>
-              <h3>{game.home_team}</h3>
-            </div>
-            <div className={`odds-info ${!user.id ? 'blurred' : ''}`}>
-              <div className='odds-data'>
-                <p>Moneyline</p>
-                <p>{user.id ? calculateAverageAmericanOdds(game.bookmakers, game.away_team) : 'Login to see'}</p>
-                <p>{user.id ? calculateAverageAmericanOdds(game.bookmakers, game.home_team) : 'Login to see'}</p>
-              </div>
-            </div>
+            <GameDetails
+              commenceTime={game.commence_time}
+              awayTeam={game.away_team}
+              homeTeam={game.home_team}
+              bookmakers={game.bookmakers}
+              user={user}
+            />
             <button onClick={() => handleClick(game.id)} className="view-odds-link">View All Odds</button>
           </li>
         ))}
