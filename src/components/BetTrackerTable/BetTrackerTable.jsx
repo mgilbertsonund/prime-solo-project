@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteBet } from '../../redux/actions/deletebet.actions'; // Adjust the path as needed
-import { calculateProfitOrLoss } from '../../utils/betCalculator'; 
+import { deleteBet } from '../../redux/actions/deletebet.actions.js';
+import { updateBet } from '../../redux/actions/updatebet.actions.js';
+import { calculateProfitOrLoss } from '../../utils/betCalculator';
 import './BetTrackerTable.css';
 
 const BetTrackerTable = ({ bets }) => {
@@ -33,6 +34,11 @@ const BetTrackerTable = ({ bets }) => {
         dispatch(deleteBet(betId));
     };
 
+    // Toggle bet success handler
+    const toggleBetSuccess = (betId, currentSuccess) => {
+        dispatch(updateBet(betId, !currentSuccess)); 
+    };
+
     return (
         <div className="table-container">
             <h3 className='header'>Bet History</h3>
@@ -45,13 +51,14 @@ const BetTrackerTable = ({ bets }) => {
                         <th>Odds</th>
                         <th>Stake</th>
                         <th>Profit/Loss</th>
+                        <th>Successful?</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {currentBets.map((bet, index) => {
                         const profitLoss = calculateProfitOrLoss(parseFloat(bet.stake), parseFloat(bet.odds), bet.successful_bet);
-                        const profitLossColor = profitLoss >= 0 ? '#4caf50' : '#f05454';
+                        const profitLossColor = bet.successful_bet === null ? '#dddddd' : (profitLoss >= 0 ? '#4caf50' : '#f05454');
 
                         return (
                             <tr key={index}>
@@ -62,6 +69,17 @@ const BetTrackerTable = ({ bets }) => {
                                 <td>${bet.stake}</td>
                                 <td style={{ color: profitLossColor }}>
                                     ${profitLoss.toFixed(2)}
+                                </td>
+                                <td>
+                                    <div className="custom-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            id={`bet-success-${bet.bet_id}`}
+                                            checked={bet.successful_bet || false}
+                                            onChange={() => toggleBetSuccess(bet.bet_id, bet.successful_bet)}
+                                        />
+                                        <label htmlFor={`bet-success-${bet.bet_id}`} />
+                                    </div>
                                 </td>
                                 <td>
                                     <button className="delete-button" onClick={() => handleDelete(bet.bet_id)}>Delete</button>

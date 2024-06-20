@@ -73,5 +73,33 @@ router.delete('/user/:id', ensureAuthenticated, async (req, res) => {
     }
 });
 
+router.put('/user/:id', ensureAuthenticated, async (req, res) => {
+    const betId = req.params.id;
+    const userId = req.user.id;
+    const { successful_bet } = req.body;
+
+    try {
+        const query = `
+            UPDATE users_bets 
+            SET successful_bet = $1
+            WHERE bet_id = $2 AND user_id = $3
+            RETURNING *;
+        `;
+        const values = [successful_bet, betId, userId];
+
+        const result = await pool.query(query, values);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Bet not found or not authorized to update' });
+        }
+
+        res.status(200).json(result.rows[0]);
+    } catch (error) {
+        console.error('Error updating bet:', error);
+        res.status(500).json({ error: 'Failed to update bet' });
+    }
+});
+
+module.exports = router;
 
 module.exports = router;

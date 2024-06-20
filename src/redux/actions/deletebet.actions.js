@@ -1,6 +1,6 @@
 // deletebet.actions.js
 import axios from 'axios';
-import { fetchBets } from './getbets.actions'; // Adjust the path as needed
+import { fetchBets } from './getbets.actions'; 
 
 // Action Types
 export const DELETE_BET_REQUEST = 'DELETE_BET_REQUEST';
@@ -20,7 +20,7 @@ export const deleteBet = (betId) => {
             await axios.delete(`/api/bets/user/${betId}`);
             dispatch(deleteBetSuccess(betId));
             // Fetch the updated list of bets after deletion
-            dispatch(fetchBets()); // No need to pass userId since it's handled by fetchBets
+            dispatch(fetchBets()); 
         } catch (error) {
             dispatch(deleteBetFailure(error.message));
         }

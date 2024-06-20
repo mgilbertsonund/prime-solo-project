@@ -8,6 +8,7 @@ import bookmakers from './bookmakers.reducer';
 import userPreferences from './userPreferences.reducer';
 import bets from './bets.reducer';
 import deleteBet from './deletebet.reducer';
+import updateBet from './updatebet.reducer';
 
 // rootReducer is the primary reducer for our entire project
 // It bundles up all of the other reducers so our project can use them.
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   userPreferences,
   bets,
   deleteBet,
+  updateBet,
 });
 
 export default rootReducer;
