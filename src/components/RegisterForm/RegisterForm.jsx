@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import './RegisterForm.css'; // Import the CSS file for RegisterForm styling
+import name from '../../assets/name.png';
+import logo from '../../assets/logo.png';
 
 function RegisterForm() {
   const [username, setUsername] = useState('');
@@ -32,54 +35,64 @@ function RegisterForm() {
   };
 
   return (
-    <form className="formPanel" onSubmit={registerUser}>
-      <h2>Welcome to FullStack Bets</h2>
-      {errors.registrationMessage && (
-        <h3 className="alert" role="alert">
-          {errors.registrationMessage}
-        </h3>
-      )}
-      <div>
-        <label htmlFor="username">
-          Username:
+    <div className="formContainer"> 
+      <div className="formHeader">
+        <div className="branding">
+          <img src={logo} alt="Logo" className="formLogo" />
+          <img src={name} alt="Name" className="formName" />
+        </div>
+        <form className="formPanel" onSubmit={registerUser}>
+          <h2>Welcome to FullStack Bets</h2>
+          {errors.registrationMessage && (
+            <h3 className="alert" role="alert">
+              {errors.registrationMessage}
+            </h3>
+          )}
+          <label htmlFor="username">Username:</label>
           <input
             type="text"
             name="username"
             value={username}
             required
+            placeholder="Choose a username"
             onChange={(event) => setUsername(event.target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
             name="password"
             value={password}
             required
+            placeholder="Enter a password"
             onChange={(event) => setPassword(event.target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="confirmPassword">
-          Confirm Password:
+          <label htmlFor="confirmPassword">Confirm Password:</label>
           <input
             type="password"
             name="confirmPassword"
             value={confirmPassword}
             required
+            placeholder="Confirm your password"
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
-        </label>
+          <input className="btn" type="submit" name="submit" value="Register" />
+          <center>
+            Already have an account? {` `}
+            <button
+              type="button"
+              className="btn btn_asLink"
+              onClick={() => {
+                history.push('/login');
+              }}
+            >
+              Log in instead
+            </button>
+          </center>
+        </form>
       </div>
-      <div>
-        <input className="btn" type="submit" name="submit" value="Register" />
-      </div>
-    </form>
+    </div>
   );
 }
 
 export default RegisterForm;
+

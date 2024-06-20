@@ -15,10 +15,9 @@ const MatchPageForm = ({ userId, selectedMarket, onCancel }) => {
     useEffect(() => {
         const fetchBookmakers = async () => {
             try {
-                const response = await fetch('/api/bookmakers'); // Adjust endpoint as per your API
+                const response = await fetch('/api/bookmakers'); 
                 const data = await response.json();
-                setBookmakers(data); // Assuming data is an array of bookmakers
-                console.log("Fetched Bookmakers:", data); // Log fetched bookmakers for debugging
+                setBookmakers(data); 
             } catch (error) {
                 console.error('Error fetching bookmakers:', error);
             }
@@ -41,15 +40,13 @@ const MatchPageForm = ({ userId, selectedMarket, onCancel }) => {
         const betData = {
             user_id: userId,
             market: selectedMarket.market,
-            bookmaker_id: selectedBookmaker.bookmaker_id, // Use the fetched bookmaker_id
+            bookmaker_id: selectedBookmaker.bookmaker_id, 
             odds: selectedMarket.oddsPrice,
             stake: parseFloat(stake),
             isArbitrage: isArbitrage,
             bet_date: new Date().toISOString(),
-            successful_bet: false,
+            successful_bet: null,
         };
-
-        console.log("Bet Data to be sent:", betData); // Debugging log
 
         dispatch(saveBetRequest(betData));
         onCancel();

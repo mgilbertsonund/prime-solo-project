@@ -1,0 +1,93 @@
+/* LoginForm.css */
+
+.formContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  background-color: #222831; 
+  color: white; 
+}
+
+.formHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; 
+}
+
+.formLogo {
+  width: 110px;
+  height: auto; 
+  margin-right: 10px; 
+}
+
+.formName {
+  width: auto; 
+  height: 60px;
+}
+
+.formPanel {
+  box-sizing: border-box;
+  width: 400px;
+  max-width: 100%;
+  padding: 25px;
+  background-color: #30475E;
+  border-radius: 3px;
+}
+
+input {
+  margin: 5px;
+  margin-bottom: 10px;
+  width: calc(100% - 10px);
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid #F05454;
+  border-width: 1px 1px 3px;
+  border-radius: 4px;
+  background-color: #222831;
+  color: #DDDDDD;
+  font-size: 1.1rem;
+  outline: 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn:hover {
+  background-color: #F05454;
+  text-decoration: none;
+}
+
+.btn_asLink {
+  padding: 0;
+  border: none;
+  border-bottom: 2px solid #222831;
+  background: none;
+  color: #F05454;
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn_asLink:hover {
+  border-color: #222831;
+  color: #DDDDDD;
+}
+
+.alert {
+  box-sizing: border-box;
+  padding: 15px 10px;
+  margin: 15px 0;
+  border: 2px solid #e01616;
+  background-color: #efefef;
+  border-radius: 3px;
+  color: #e01616;
+  font-size: 0.8rem;
+}

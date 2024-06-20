@@ -1,4 +1,5 @@
-/* Global Styles */
+/* App.css */
+
 html,
 body,
 #react-root {
@@ -87,83 +88,4 @@ img {
   padding: 20px;
   flex-grow: 1;
   overflow-y: auto; /* Enable vertical scroll */
-}
-
-/* Form Styles */
-.formPanel {
-  box-sizing: border-box;
-  width: 400px;
-  max-width: 100%;
-  padding: 25px;
-  margin: 0 auto 20px;
-  background-color: #30475E;
-  border-radius: 3px;
-}
-
-input {
-  margin: 5px;
-  margin-bottom: 10px;
-  width: calc(100% - 10px);
-}
-
-/* Button Styles */
-.btn {
-  display: inline-block;
-  padding: 10px 20px;
-  border: 1px solid #F05454;
-  border-width: 1px 1px 3px;
-  border-radius: 4px;
-  background-color: #222831;
-  color: #DDDDDD;
-  font-size: 1.1rem;
-  outline: 0;
-  cursor: pointer;
-  text-align: center;
-}
-
-.btn_sizeMin {
-  min-height: 50px;
-  min-width: 100px;
-}
-
-.btn_sizeSm {
-  padding: 10px 15px;
-  font-size: 0.8rem;
-}
-
-.btn_sizeFull {
-  display: block;
-  width: 100%;
-}
-
-.btn:hover {
-  background-color: #F05454;
-  text-decoration: none;
-}
-
-.btn_asLink {
-  padding: 0;
-  border: none;
-  border-bottom: 1px solid #444;
-  background: none;
-  color: #F05454;
-  font: inherit;
-  cursor: pointer;
-}
-
-.btn_asLink:hover {
-  border-color: #F05454;
-  color: #F05454;
-}
-
-/* Alert Styles */
-.alert {
-  box-sizing: border-box;
-  padding: 15px 10px;
-  margin: 15px 0;
-  border: 2px solid #e01616;
-  background-color: #efefef;
-  border-radius: 3px;
-  color: #e01616;
-  font-size: 0.8rem;
 }

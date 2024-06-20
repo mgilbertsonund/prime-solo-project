@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
 import { useSelector } from 'react-redux';
 import logo from '../../assets/logo.png';
@@ -10,10 +10,18 @@ import './Nav.css';
 function Nav() {
   const user = useSelector((store) => store.user);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const location = useLocation();
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
+
+  // Check if current path is in the hide list
+  const hideNavPaths = ['/login', '/registration'];
+
+  if (hideNavPaths.includes(location.pathname)) {
+    return null; // Don't render the Nav
+  }
 
   return (
     <div className="nav">
