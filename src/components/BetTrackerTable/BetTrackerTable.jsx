@@ -57,7 +57,7 @@ const BetTrackerTable = ({ bets }) => {
                             <tr key={index}>
                                 <td>{new Date(bet.bet_date).toLocaleDateString()}</td>
                                 <td>{bet.market}</td>
-                                <td>{bet.bookmaker_id}</td>
+                                <td>{bet.bookmaker_name}</td>
                                 <td>{bet.odds}</td>
                                 <td>${bet.stake}</td>
                                 <td style={{ color: profitLossColor }}>

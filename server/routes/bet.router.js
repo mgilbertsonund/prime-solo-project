@@ -2,6 +2,13 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
 
+const ensureAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.status(401).json({ error: 'User not authenticated' });
+};
+
 router.post('/', async (req, res) => {
     const { user_id, market, bookmaker_id, odds, stake, isArbitrage, bet_date, successful_bet } = req.body;
 
@@ -26,18 +33,19 @@ router.post('/', async (req, res) => {
     }
 });
 
-const ensureAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.status(401).json({ error: 'User not authenticated' });
-};
-
 router.get('/user', ensureAuthenticated, async (req, res) => {
-    const userId = req.user.id; // Assuming Passport stores user info here
+    const userId = req.user.id; 
 
     try {
-        const query = `SELECT * FROM users_bets WHERE user_id = $1 ORDER BY bet_date DESC`;
+        const query = `
+            SELECT 
+                ub.*,
+                bm.bookmaker_name
+            FROM users_bets ub
+            JOIN bookmakers bm ON ub.bookmaker_id = bm.bookmaker_id
+            WHERE ub.user_id = $1
+            ORDER BY ub.bet_date DESC
+        `;
         const result = await pool.query(query, [userId]);
         res.status(200).json(result.rows);
     } catch (error) {
@@ -48,7 +56,7 @@ router.get('/user', ensureAuthenticated, async (req, res) => {
 
 router.delete('/user/:id', ensureAuthenticated, async (req, res) => {
     const betId = req.params.id;
-    const userId = req.user.id; // User ID from authenticated session
+    const userId = req.user.id; 
 
     try {
         const query = `DELETE FROM users_bets WHERE bet_id = $1 AND user_id = $2 RETURNING *`;
