@@ -33,6 +33,7 @@
     "client": "vite",
     "server": "nodemon --watch server server/server.js",
     "build": "vite build",
+    "postinstall": "vite build",
     "test": "vitest"
   },
   "devDependencies": {

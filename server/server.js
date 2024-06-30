@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT || 5001;
@@ -16,8 +17,8 @@ const betRouter = require('./routes/bet.router');
 
 // Express Middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(express.static('build'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, '../dist'))); // Serving static files from 'dist'
 
 // Passport Session Configuration
 app.use(sessionMiddleware);
@@ -27,11 +28,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use('/api/user', userRouter, oddsRouter);
+app.use('/api/user', userRouter);
+app.use('/api/odds', oddsRouter);
 app.use('/api/bookmakers', bookmakersRouter);
 app.use('/api/user/bookmaker-preferences', userBookmakerPreferencesRouter);
 app.use('/api/bets', betRouter);
 
+// Handle SPA - Serve index.html for all non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
 
 // Listen Server & Port
 app.listen(PORT, () => {
