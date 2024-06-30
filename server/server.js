@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 require('dotenv').config();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 7540;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
