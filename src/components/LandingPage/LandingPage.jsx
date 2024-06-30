@@ -30,7 +30,7 @@ const LandingPage = () => {
 
   return (
     <div className="container">
-      <h2>Upcoming Games</h2>
+      <h2>Games: Live & Upcoming Odds</h2>
       <ul className="games-list">
         {odds.map((game) => (
           <li key={game.id} className="game-item">
