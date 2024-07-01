@@ -10,6 +10,7 @@ const oddsRouter = require('./routes/odds.router');
 const bookmakersRouter = require('./routes/bookmakers.router');
 const userBookmakerPreferencesRouter = require('./routes/userpreferences.router');
 const betRouter = require('./routes/bet.router');
+const petRouter = require('./routes/pets.router');
 
 dotenv.config();
 const app = express();
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Session middleware
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET, // Replace with your actual session secret
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } // Set secure: true in production with HTTPS
@@ -29,8 +30,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from 'build' directory
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Serve index.html from root directory
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // API routes
 app.use('/api/user', userRouter);
@@ -38,6 +44,7 @@ app.use('/api/odds', oddsRouter);
 app.use('/api/bookmakers', bookmakersRouter);
 app.use('/api/user/bookmaker-preferences', userBookmakerPreferencesRouter);
 app.use('/api/bets', betRouter);
+app.use('/api/pets', petRouter); // Example additional route
 
 // PostgreSQL connection pool setup
 let pool;
