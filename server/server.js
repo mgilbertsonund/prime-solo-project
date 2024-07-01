@@ -10,7 +10,6 @@ const oddsRouter = require('./routes/odds.router');
 const bookmakersRouter = require('./routes/bookmakers.router');
 const userBookmakerPreferencesRouter = require('./routes/userpreferences.router');
 const betRouter = require('./routes/bet.router');
-const petRouter = require('./routes/pets.router');
 
 dotenv.config();
 const app = express();
@@ -44,7 +43,6 @@ app.use('/api/odds', oddsRouter);
 app.use('/api/bookmakers', bookmakersRouter);
 app.use('/api/user/bookmaker-preferences', userBookmakerPreferencesRouter);
 app.use('/api/bets', betRouter);
-app.use('/api/pets', petRouter); // Example additional route
 
 // PostgreSQL connection pool setup
 let pool;
