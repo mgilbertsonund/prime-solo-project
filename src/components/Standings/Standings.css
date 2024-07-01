@@ -9,6 +9,8 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
     max-width: 1200px; /* Limit the width */
     margin: 0 auto; /* Center the container */
+    max-width: 100%;
+    overflow-x: auto; /* Allow horizontal scrolling if necessary */
   }
   
   /* Heading Styles */
@@ -34,6 +36,8 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px; /* Space below table */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent text wrapping */
   }
   
   /* Table Header */
@@ -74,13 +78,13 @@
     text-align: right; /* Align last column to the right */
   }
   
-  /* Responsive Design */
   @media (max-width: 768px) {
     .standings-container {
       padding: 10px; /* Reduce padding on small screens */
     }
   
-    .standings th, .standings td {
+    .standings th,
+    .standings td {
       padding: 8px; /* Reduce cell padding on small screens */
       font-size: 0.8rem; /* Smaller font for table cells */
     }
@@ -89,4 +93,5 @@
       font-size: 0.9rem; /* Smaller font for table headers */
     }
   }
+  
   
